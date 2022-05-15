@@ -5,6 +5,7 @@ from snake import Snake
 from button import Button
 from food import Food
 
+
 class SnakeGame:
     """Main class to control game logic and manage objects"""
 
