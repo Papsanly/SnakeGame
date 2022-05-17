@@ -1,6 +1,3 @@
-import pygame.font
-
-
 class Button:
     """Startup button class"""
 

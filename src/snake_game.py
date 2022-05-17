@@ -33,9 +33,14 @@ class SnakeGame:
 
     def _update_screen(self):
         """Update rendered objects"""
+        # debugging tools
         debug.fill_bg()
         debug.draw_grid()
+
+        # draw game objects
         self.snake.draw()
+
+        # update screen
         pygame.display.update()
 
     def run(self):
