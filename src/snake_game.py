@@ -1,9 +1,9 @@
 import pygame
 
-from settings import Settings
 from snake import Snake
 from button import Button
-from food import Food
+from screen import Screen
+import debug
 
 
 class SnakeGame:
@@ -14,15 +14,15 @@ class SnakeGame:
         pygame.init()
 
         # start game active
-        self.is_active = True
+        self.game_active = True
 
         # create game objects
         self.foods = pygame.sprite.Group()
-        self.button = Button('Play')
+        self.button = Button()
         self.snake = Snake()
 
         # create screen
-        pygame.display.set_mode(Settings.resolution)
+        self.screen_rect = Screen.rect
         pygame.display.set_caption('Snake')
 
     def _check_events(self):
@@ -33,14 +33,18 @@ class SnakeGame:
 
     def _update_screen(self):
         """Update rendered objects"""
+        debug.fill_bg()
+        debug.draw_grid()
+        self.snake.draw()
         pygame.display.update()
 
     def run(self):
         """Run main game loop"""
         while True:
             self._check_events()
-            if self.is_active:
-                self._update_screen()
+            if self.game_active:
+                pass
+            self._update_screen()
 
 
 if __name__ == '__main__':
