@@ -12,8 +12,10 @@ class SnakeBodyStraight(Sprite):
 
         if obj_1.position.get_coords().y == obj_2.position.get_coords().y:
             self.orientation = 'horisontal'
-        else:
+        elif obj_1.position.get_coords().x == obj_2.position.get_coords().x:
             self.orientation = 'vertical'
+        else:
+            raise ValueError("obj_1 and obj_2 are not aligned")
 
         if self.orientation == 'horisontal':
             self.obj_start = obj_1 if obj_1.position.get_coords().x < obj_2.position.get_coords().x else obj_2
