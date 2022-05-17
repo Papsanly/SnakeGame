@@ -7,5 +7,5 @@ class Food(Sprite):
     def __init__(self):
         """Init attributes"""
         super().__init__()
-        raise NotImplementedError
+        pass
     

@@ -1,51 +1,38 @@
 import pygame
 from pygame.sprite import Sprite
-
+from snake_body_end import SnakeBodyEnd
 from settings import Settings
-from orientation import Orientation
 
 
 class SnakeBodyStraight(Sprite):
     """Stright body part of snake class"""
 
-    def __init__(self, position, length, fraction=0, orientation=Orientation('U')):
+    def __init__(self, obj_1: SnakeBodyEnd, obj_2: SnakeBodyEnd):
         super().__init__()
 
-        self.length = length
-        self.orientation = orientation
-        self.fraction = fraction
-        self.position = position
-
-        # get coordinates for Rect object
-        if orientation.name == 'U':
-            left = Settings.get_snake_rect_offset()
-            top = -Settings.grid_size * (length - 1)
-            width = Settings.grid_size - 2 * Settings.get_snake_rect_offset()
-            height = Settings.grid_size * length
-        elif orientation.name == 'D':
-            left = Settings.get_snake_rect_offset()
-            top = 0
-            width = Settings.grid_size - 2 * Settings.get_snake_rect_offset()
-            height = Settings.grid_size * length
-        elif orientation.name == 'R':
-            left = -Settings.grid_size * (length - 1)
-            top = Settings.get_snake_rect_offset()
-            width = Settings.grid_size * length
-            height = Settings.grid_size - 2 * Settings.get_snake_rect_offset()
-        elif orientation.name == 'L':
-            left = 0
-            top = Settings.get_snake_rect_offset()
-            width = Settings.grid_size * length
-            height = Settings.grid_size - 2 * Settings.get_snake_rect_offset()
+        if obj_1.position.get_coords().y == obj_2.position.get_coords().y:
+            self.orientation = 'horisontal'
         else:
-            raise ValueError("orientation argument takes 'U', 'D', 'R' or 'L'")
+            self.orientation = 'vertical'
 
-        self.rect = pygame.Rect(
-            position.get().x + left,
-            position.get().y + top,
-            width,
-            height,
-        )
+        if self.orientation == 'horisontal':
+            self.obj_start = obj_1 if obj_1.position.get_coords().x < obj_2.position.get_coords().x else obj_2
+            self.obj_end = obj_1 if self.obj_start == obj_2 else obj_2
+            left = int(self.obj_start.position.get_coords_center().x)
+            top = int(self.obj_start.position.get_coords().y - Settings.get_snake_rect_offset())
+            width = int(self.obj_end.position.get_coords().x - self.obj_start.position.get_coords().x)
+            height = int(Settings.get_snake_width())
+        elif self.orientation == 'vertical':
+            self.obj_start = obj_1 if obj_1.position.get_coords().y < obj_2.position.get_coords().y else obj_2
+            self.obj_end = obj_1 if self.obj_start == obj_2 else obj_2
+            left = int(self.obj_start.position.get_coords().x + Settings.get_snake_rect_offset())
+            top = int(self.obj_start.position.get_coords_center().y)
+            width = int(Settings.get_snake_width())
+            height = int(self.obj_end.position.get_coords().y - self.obj_start.position.get_coords().y)
+        else:
+            raise ValueError("Orientation must be either horisontal or vertical")
+
+        self.rect = pygame.Rect(left, top, width, height)
 
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(3 * (255,))
