@@ -2,13 +2,14 @@ import pygame
 from pygame.math import Vector2
 from pygame.sprite import Sprite
 from settings import Settings
-from grid_transformation import GridTransformation
+from grid_position import GridPos
+from screen import Screen
 
 
 class SnakeBodyEnd(Sprite):
     """Straight body part of snake class"""
 
-    def __init__(self, position: GridTransformation):
+    def __init__(self, position: GridPos):
         super().__init__()
 
         self.image = pygame.image.load('../resources/snake_end.bmp')
@@ -22,8 +23,8 @@ class SnakeBodyEnd(Sprite):
         self.rect.x = self.position.get_coords().x
         self.rect.y = self.position.get_coords().y
 
-    def draw(self, surface: pygame.Surface) -> None:
-        surface.blit(self.image, self.rect)
+    def draw(self) -> None:
+        Screen.surface.blit(self.image, self.rect)
 
     def update(self) -> None:
         """Update position"""

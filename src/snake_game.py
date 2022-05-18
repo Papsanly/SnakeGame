@@ -1,12 +1,17 @@
-from timeit import default_timer as timer
-
 import pygame
+import os
+
+from timeit import default_timer as timer
 
 from snake import Snake
 from button import Button
 from screen import Screen
 from settings import Settings
+from statistic import Stats
 import debug
+
+# change working directory for launching through shortcuts
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 class SnakeGame:
@@ -15,9 +20,6 @@ class SnakeGame:
     def __init__(self):
         """Initiate pygame and create game objects"""
         pygame.init()
-
-        # start game active
-        self.game_active = True
 
         # create game objects
         self.foods = pygame.sprite.Group()
@@ -34,6 +36,10 @@ class SnakeGame:
             if event.type == pygame.QUIT:
                 exit(0)
 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self.button.check_clicked(mouse_pos)
+
     def _update_screen(self):
         """Update rendered objects"""
         # debugging tools
@@ -42,6 +48,8 @@ class SnakeGame:
 
         # draw game objects
         self.snake.draw()
+        if not Stats.game_active:
+            self.button.draw()
 
         # update screen
         pygame.display.update()
@@ -52,8 +60,10 @@ class SnakeGame:
             t0 = timer()
             self._check_events()
 
-            if self.game_active:
+            if Stats.game_active:
                 self.snake.update()
+            else:
+                self.button.update()
 
             self._update_screen()
 
