@@ -15,7 +15,7 @@ class Snake:
         """Init snake attributes and body parts"""
 
         # Basic attributes
-        self.length = 3
+        self.length = 1
         self.speed = Sets.speed
 
         # Body parts pygame groups
@@ -25,10 +25,10 @@ class Snake:
         # create snake of length one and center it
         center = Sets.grid_count // 2
         self.body_head = (SnakeBodyEnd(
-                GridTransformation(center, offset=Vector2(0, -0.5))
+            GridTransformation(center, offset=Vector2(0, -0.5))
         ))
         self.body_tail = (SnakeBodyEnd(
-            GridTransformation(Vector2(center.x, center.y + self.length - 1), offset=Vector2(0, 0.5))
+            GridTransformation(center, offset=Vector2(0, 0.5))
         ))
         self.body_straight.add(SnakeBodyStraight(
             self.body_head, self.body_tail
@@ -38,3 +38,9 @@ class Snake:
         self.body_head.draw(Screen.surface)
         self.body_tail.draw(Screen.surface)
         self.body_straight.draw(Screen.surface)
+
+    def update(self):
+        """Update position"""
+        self.body_head.update()
+        self.body_tail.update()
+        self.body_straight.update()

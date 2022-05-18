@@ -21,3 +21,7 @@ class GridTransformation:
     def get_coords_center(self) -> Vector2:
         """Get center of specified grid square in pixels"""
         return self.get_coords() + Vector2(Settings.grid_size, Settings.grid_size) / 2
+
+    def move(self, move_vec: Vector2) -> None:
+        """Move along Vector2"""
+        self.xy += move_vec

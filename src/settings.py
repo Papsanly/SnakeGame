@@ -8,11 +8,11 @@ class Settings:
     Data class for game settings
     1 unit = 1 grid square
     """
-    # changable settings before running
+    # changeable settings before running
     grid_count = Vector2(15, 15)  # units
     grid_size = 75  # pixels / unit
     food_radius = 0.5  # amount of grid square coverage
-    speed = 1  # unit / second
+    speed = 0.002  # unit / second
 
     # fixed settings
     fps = None
@@ -33,10 +33,10 @@ class Settings:
         return cls.grid_size - 2 * cls.get_snake_rect_offset()
 
     @classmethod
-    def set_fps(cls, iter_time):
-        """Set current game iteration time - time taken by one iteration of main loop"""
-        cls.fps = 1 / iter_time
+    def set_fps(cls, fps):
+        """Set current fps based on iteration time taken by main while loop"""
+        cls.fps = fps
 
     @classmethod
     def get_speed(cls):
-        return cls.grid_size * cls.speed / cls.fps
+        return cls.grid_size * cls.speed / cls.fps if cls.fps else 0

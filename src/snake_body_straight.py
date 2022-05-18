@@ -11,13 +11,13 @@ class SnakeBodyStraight(Sprite):
         super().__init__()
 
         if obj_1.position.get_coords().y == obj_2.position.get_coords().y:
-            self.orientation = 'horisontal'
+            self.orientation = 'horizontal'
         elif obj_1.position.get_coords().x == obj_2.position.get_coords().x:
             self.orientation = 'vertical'
         else:
             raise ValueError("obj_1 and obj_2 are not aligned")
 
-        if self.orientation == 'horisontal':
+        if self.orientation == 'horizontal':
             self.obj_start = obj_1 if obj_1.position.get_coords().x < obj_2.position.get_coords().x else obj_2
             self.obj_end = obj_1 if self.obj_start == obj_2 else obj_2
             left = int(self.obj_start.position.get_coords_center().x)
@@ -32,9 +32,18 @@ class SnakeBodyStraight(Sprite):
             width = int(Settings.get_snake_width())
             height = int(self.obj_end.position.get_coords().y - self.obj_start.position.get_coords().y)
         else:
-            raise ValueError("Orientation must be either horisontal or vertical")
+            raise ValueError("Orientation must be either horizontal or vertical")
 
         self.rect = pygame.Rect(left, top, width, height)
 
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(3 * (255,))
+
+    def update(self):
+        """Update position according to obj_start and obj_end"""
+        if self.orientation == 'horizontal':
+            self.rect.x = self.obj_start.position.get_coords_center().x
+            self.rect.width = self.obj_end.position.get_coords_center().x - self.rect.x
+        elif self.orientation == 'vertical':
+            self.rect.y = self.obj_start.position.get_coords_center().y
+            self.rect.width = self.obj_end.position.get_coords_center().y - self.rect.y

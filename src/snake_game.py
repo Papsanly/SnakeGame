@@ -1,4 +1,4 @@
-import time
+from timeit import default_timer as timer
 
 import pygame
 
@@ -48,16 +48,16 @@ class SnakeGame:
 
     def run(self):
         """Run main game loop"""
-        iter_time = 0
         while True:
-            t0 = time.time()
+            t0 = timer()
             self._check_events()
+
             if self.game_active:
                 self.snake.update()
-            if iter_time != 0:
-                self._update_screen()
-            iter_time = time.time() - t0
-            Settings.set_fps(iter_time)
+
+            self._update_screen()
+
+            Settings.set_fps(1 / (timer() - t0))
 
 
 if __name__ == '__main__':
