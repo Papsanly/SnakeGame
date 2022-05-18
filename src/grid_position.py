@@ -2,14 +2,14 @@ from settings import Settings
 from pygame.math import Vector2
 
 
-class GridTransformation:
+class GridPos:
     """Class to manage coordinates and rotation of game objects on grid"""
 
-    def __init__(self, grid_square: Vector2, offset=Vector2(0, 0)):
-        self.xy = grid_square
-        self.x = grid_square.x
-        self.y = grid_square.y
-        self.offset = offset
+    def __init__(self, grid_square: Vector2 | tuple, offset: Vector2 | tuple = Vector2(0, 0)):
+        self.xy = Vector2(grid_square)
+        self.x = self.xy.x
+        self.y = self.xy.y
+        self.offset = Vector2(offset)
 
     def get_coords(self) -> Vector2:
         """Get exact pixel position on upper right corner of the object"""

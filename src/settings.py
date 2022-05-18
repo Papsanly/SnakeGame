@@ -2,19 +2,19 @@ from dataclasses import dataclass
 from pygame.math import Vector2
 
 
-@dataclass(frozen=True)
+@dataclass
 class Settings:
     """
     Data class for game settings
     1 unit = 1 grid square
     """
-    # changeable settings before running
+    # changeable settings by the player
     grid_count = Vector2(15, 15)  # units
     grid_size = 75  # pixels / unit
-    food_radius = 0.5  # amount of grid square coverage
-    speed = 1  # unit / second
+    food_radius = 0.5  # persentage of grid square size
+    speed = 2  # unit / second
 
-    # fixed settings
+    # unchangeable settings by the player
     fps: float = None
 
     @classmethod

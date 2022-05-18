@@ -4,7 +4,7 @@ from screen import Screen
 from settings import Settings
 from snake_body_end import SnakeBodyEnd
 from snake_body_straight import SnakeBodyStraight
-from grid_transformation import GridTransformation
+from grid_position import GridPos
 from pygame.math import Vector2
 
 
@@ -25,18 +25,18 @@ class Snake:
         # create snake of length one and center it
         center = Settings.grid_count // 2
         self.body_head = (SnakeBodyEnd(
-            GridTransformation(center, offset=Vector2(0, -0.5))
+            GridPos(center, offset=(0, -0.5))
         ))
         self.body_tail = (SnakeBodyEnd(
-            GridTransformation(center, offset=Vector2(0, 0.5))
+            GridPos(center, offset=(0, 0.5))
         ))
         self.body_straight.add(SnakeBodyStraight(
             self.body_head, self.body_tail
         ))
 
     def draw(self) -> None:
-        self.body_head.draw(Screen.surface)
-        self.body_tail.draw(Screen.surface)
+        self.body_head.draw()
+        self.body_tail.draw()
         self.body_straight.draw(Screen.surface)
 
     def update(self):
