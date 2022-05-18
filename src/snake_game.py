@@ -1,8 +1,11 @@
+import time
+
 import pygame
 
 from snake import Snake
 from button import Button
 from screen import Screen
+from settings import Settings
 import debug
 
 
@@ -45,11 +48,16 @@ class SnakeGame:
 
     def run(self):
         """Run main game loop"""
+        iter_time = 0
         while True:
+            t0 = time.time()
             self._check_events()
             if self.game_active:
-                pass
-            self._update_screen()
+                self.snake.update()
+            if iter_time != 0:
+                self._update_screen()
+            iter_time = time.time() - t0
+            Settings.set_fps(iter_time)
 
 
 if __name__ == '__main__':

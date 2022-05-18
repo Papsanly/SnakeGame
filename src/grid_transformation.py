@@ -7,8 +7,8 @@ class GridTransformation:
 
     def __init__(self, grid_square: Vector2, offset=Vector2(0, 0)):
         self.xy = grid_square
-        self.x = grid_square[0]
-        self.y = grid_square[1]
+        self.x = grid_square.x
+        self.y = grid_square.y
         self.offset = offset
 
     def get_coords(self) -> Vector2:

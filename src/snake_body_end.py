@@ -13,6 +13,8 @@ class SnakeBodyEnd(Sprite):
         self.image = pygame.image.load('../resources/snake_end.bmp')
         self.image = pygame.transform.smoothscale(self.image, 2*(Settings.grid_size,))
         self.position = position
+        self.direction = 'U'
+        self.speed = Settings.speed
 
         # get rect for draw method in pygame.sprite.Group()
         self.rect = self.image.get_rect()
@@ -21,3 +23,6 @@ class SnakeBodyEnd(Sprite):
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.blit(self.image, self.rect)
+
+    def update(self) -> None:
+        """Update position"""

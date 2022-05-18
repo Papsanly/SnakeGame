@@ -5,7 +5,7 @@ from settings import Settings
 
 
 class SnakeBodyStraight(Sprite):
-    """Stright body part of snake class"""
+    """Straight body part of snake class"""
 
     def __init__(self, obj_1: SnakeBodyEnd, obj_2: SnakeBodyEnd):
         super().__init__()
