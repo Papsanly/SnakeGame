@@ -12,10 +12,10 @@ class Settings:
     grid_count = Vector2(15, 15)  # units
     grid_size = 75  # pixels / unit
     food_radius = 0.5  # amount of grid square coverage
-    speed = 0.002  # unit / second
+    speed = 1  # unit / second
 
     # fixed settings
-    fps = None
+    fps: float = None
 
     @classmethod
     def get_resolution(cls) -> Vector2:

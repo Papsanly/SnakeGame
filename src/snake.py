@@ -1,7 +1,7 @@
 import pygame
 
 from screen import Screen
-from settings import Settings as Sets
+from settings import Settings
 from snake_body_end import SnakeBodyEnd
 from snake_body_straight import SnakeBodyStraight
 from grid_transformation import GridTransformation
@@ -16,14 +16,14 @@ class Snake:
 
         # Basic attributes
         self.length = 1
-        self.speed = Sets.speed
+        self.speed = Settings.speed
 
         # Body parts pygame groups
         self.body_straight = pygame.sprite.Group()
         self.body_turn = pygame.sprite.Group()
 
         # create snake of length one and center it
-        center = Sets.grid_count // 2
+        center = Settings.grid_count // 2
         self.body_head = (SnakeBodyEnd(
             GridTransformation(center, offset=Vector2(0, -0.5))
         ))
