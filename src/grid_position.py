@@ -3,7 +3,7 @@ from pygame.math import Vector2
 
 
 class GridPos:
-    """Class to manage coordinates and rotation of game objects on grid"""
+    """Class to manage coordinates of game objects on grid"""
 
     def __init__(self, grid_square: Vector2 | tuple, offset: Vector2 | tuple = Vector2(0, 0)):
         self.xy = Vector2(grid_square)

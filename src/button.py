@@ -38,7 +38,7 @@ class Button:
         self.center = Settings.get_resolution() // 2 + Vector2(0, -0.5) * Settings.grid_size
 
     def check_clicked(self, mouse_pos):
-        """Check if button is clicked to set game_active to True"""
+        """Check if button is clicked to start animation"""
         if self.center.distance_to(mouse_pos) < Settings.grid_size:
             self.is_clicked = True
 
@@ -46,6 +46,7 @@ class Button:
         Screen.surface.blit(self.image, self.rect)
 
     def update(self):
+        """Update frame and activate game when animation ended"""
         self.image = self.images[self.frame]
         if self.is_clicked:
             if self.frame != len(self.images) - 1:

@@ -5,7 +5,6 @@ from settings import Settings
 from snake_body_end import SnakeBodyEnd
 from snake_body_straight import SnakeBodyStraight
 from grid_position import GridPos
-from pygame.math import Vector2
 
 
 class Snake:
@@ -17,6 +16,7 @@ class Snake:
         # Basic attributes
         self.length = 1
         self.speed = Settings.speed
+        self.turning = False
 
         # Body parts pygame groups
         self.body_straight = pygame.sprite.Group()
@@ -40,7 +40,7 @@ class Snake:
         self.body_straight.draw(Screen.surface)
 
     def update(self):
-        """Update position"""
+        """Update position and direction"""
         self.body_head.update()
         self.body_tail.update()
         self.body_straight.update()
