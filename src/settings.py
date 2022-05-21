@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pygame.math import Vector2
+from time_control import clock
 
 
 @dataclass
@@ -13,9 +14,6 @@ class Settings:
     grid_size = 75  # pixels / unit
     food_radius = 0.5  # persentage of grid square size
     speed = 2  # unit / second
-
-    # unchangeable settings by the player
-    fps: float = None
 
     @classmethod
     def get_resolution(cls) -> Vector2:
@@ -39,4 +37,5 @@ class Settings:
 
     @classmethod
     def get_speed(cls):
-        return cls.grid_size * cls.speed / cls.fps if cls.fps else 0
+        fps = clock.get_fps()
+        return cls.grid_size * cls.speed / fps

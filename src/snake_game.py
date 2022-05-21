@@ -1,12 +1,11 @@
 import pygame
 import os
 
-from timeit import default_timer as timer
-
 from snake import Snake
 from button import Button
 from screen import Screen
-from settings import Settings
+from custom_events import ANIMATE
+from time_control import clock
 from statistic import Stats
 import debug
 
@@ -33,12 +32,16 @@ class SnakeGame:
     def _check_events(self):
         """Check user input and other events"""
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 exit(0)
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self.button.check_clicked(mouse_pos)
+
+            if event.type == ANIMATE:
+                self.button.animate()
 
     def _update_screen(self):
         """Update rendered objects"""
@@ -57,7 +60,6 @@ class SnakeGame:
     def run(self):
         """Run main game loop"""
         while True:
-            t0 = timer()
             self._check_events()
 
             if Stats.game_active:
@@ -66,8 +68,7 @@ class SnakeGame:
                 self.button.update()
 
             self._update_screen()
-
-            Settings.set_fps(1 / (timer() - t0))
+            clock.tick()
 
 
 if __name__ == '__main__':
