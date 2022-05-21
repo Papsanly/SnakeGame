@@ -18,10 +18,8 @@ class SnakeBodyEnd(Sprite):
         self.direction = Vector2(0, -1)
         self.speed = Settings.speed
 
-        # get rect for draw method in pygame.sprite.Group()
-        self.rect = self.image.get_rect()
-        self.rect.x = self.position.get_coords().x
-        self.rect.y = self.position.get_coords().y
+        # get rect for Group draw method
+        self.rect = self.image.get_rect() 
 
     def draw(self) -> None:
         Screen.surface.blit(self.image, self.rect)
