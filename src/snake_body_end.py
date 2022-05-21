@@ -30,5 +30,4 @@ class SnakeBodyEnd(Sprite):
         """Update position"""
         move_vec = self.direction * Settings.get_speed()
         self.position.move(move_vec)
-        self.rect.x = self.position.get_coords().x
-        self.rect.y = self.position.get_coords().y
+        self.rect.topleft = self.position.get_coords()
