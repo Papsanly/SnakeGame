@@ -16,8 +16,8 @@ class Button:
         self.anim_data = ImageSequence(
             '../resources/start',
             GridPos(
-                grid_square=Vector2(Settings.grid_count // 2) - Vector2(1, 1),
-                offset=(0.5, 0)
+                Settings.grid_count // 2 - Vector2(1, 1),
+                (0.5, 0)
             ),
             tuple(Vector2(2, 2.5) * Settings.grid_size),
             30
