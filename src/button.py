@@ -32,7 +32,7 @@ class Button:
             self.anim_data.set_timer()
 
     def draw(self):
-        Screen.surface.blit(self.anim_data.image, self.anim_data.rect)
+        self.anim_data.draw()
 
     def update(self):
         """Activate game when animation ended"""
