@@ -42,8 +42,3 @@ class Button:
         """Activate game when animation ended"""
         if self.anim_data.ended:
             Stats.game_active = True
-
-    def animate(self):
-        """Update frame"""
-        if self.is_clicked:
-            self.anim_data.update()
