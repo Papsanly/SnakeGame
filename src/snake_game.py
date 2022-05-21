@@ -41,7 +41,7 @@ class SnakeGame:
                 self.button.check_clicked(mouse_pos)
 
             if event.type == ANIMATE:
-                self.button.animate()
+                self.button.anim_data.update()
 
     def _update_screen(self):
         """Update rendered objects"""
