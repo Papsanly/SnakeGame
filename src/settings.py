@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from pygame.math import Vector2
-from time_control import clock
 
 
 @dataclass
@@ -10,10 +9,11 @@ class Settings:
     1 unit = 1 grid square
     """
     # changeable settings by the player
-    grid_count = Vector2(15, 15)  # units
-    grid_size = 75  # pixels / unit
-    food_radius = 0.5  # persentage of grid square size
-    speed = 2  # unit / second
+    grid_count: Vector2 = Vector2(15, 15)  # units
+    grid_size: int = 75  # pixels / unit
+    food_radius: float = 0.5  # persentage of grid square size
+    speed: float = 2  # unit / second
+    fps: int = 120
 
     @classmethod
     def get_resolution(cls) -> Vector2:
@@ -31,11 +31,5 @@ class Settings:
         return cls.grid_size - 2 * cls.get_snake_rect_offset()
 
     @classmethod
-    def set_fps(cls, fps):
-        """Set current fps based on iteration time taken by main while loop"""
-        cls.fps = fps
-
-    @classmethod
     def get_speed(cls):
-        fps = clock.get_fps()
-        return cls.grid_size * cls.speed / fps
+        return cls.grid_size * cls.speed / cls.fps

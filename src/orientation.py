@@ -1,7 +1,7 @@
 from pygame.math import Vector2
 
 
-class Orienatation:
+class Orientation:
     """Class to manage object orienation in a grid"""
 
     def __init__(self, direction: str | Vector2 | int | float):
@@ -61,6 +61,6 @@ class Orienatation:
         elif self.direction == 'D':
             return 180
         elif self.direction == 'R':
-            return 90
-        elif self.direction == 'L':
             return 270
+        elif self.direction == 'L':
+            return 90

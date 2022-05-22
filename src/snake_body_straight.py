@@ -1,13 +1,15 @@
 import pygame
 from pygame.sprite import Sprite
-from snake_body_end import SnakeBodyEnd
-from settings import Settings
+
+from src.settings import Settings
+from src.snake_body_end import SnakeBodyEnd
+from src.snake_body_turn import SnakeBodyTurn
 
 
 class SnakeBodyStraight(Sprite):
     """Straight body part of snake class"""
 
-    def __init__(self, obj_start: SnakeBodyEnd, obj_end: SnakeBodyEnd):
+    def __init__(self, obj_start: SnakeBodyEnd | SnakeBodyTurn, obj_end: SnakeBodyEnd | SnakeBodyTurn):
         super().__init__()
 
         self.obj_start = obj_start
@@ -38,6 +40,9 @@ class SnakeBodyStraight(Sprite):
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(3 * (255,))
 
+    def set_obj_end(self, obj_end):
+        self.obj_end = obj_end
+
     def update(self):
         """Update position according to obj_start and obj_end"""
         if self.orientation == 'horizontal':
@@ -46,3 +51,5 @@ class SnakeBodyStraight(Sprite):
         elif self.orientation == 'vertical':
             self.rect.y = self.obj_start.position.get_coords_center().y
             self.rect.height = self.obj_end.position.get_coords_center().y - self.rect.y
+        else:
+            raise ValueError("Orientation must be either horizontal or vertical")

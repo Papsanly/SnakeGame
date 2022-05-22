@@ -1,10 +1,10 @@
 from pygame.math import Vector2
 
-from settings import Settings
-from grid_position import GridPos
-from screen import Screen
-from image_sequence import ImageSequence
-from statistic import Stats
+from src.settings import Settings
+from src.grid_position import GridPos
+from src.image_sequence import ImageSequence
+from src.states import States, GAME_ACTIVE
+from src.custom_events import ANIMATE_BUTTON
 
 
 class Button:
@@ -13,14 +13,14 @@ class Button:
     def __init__(self):
         """Init button attributes"""
         # get all images and set current image to the first one
-        self.anim_data = ImageSequence(
+        self.image_data = ImageSequence(
             '../resources/start',
             GridPos(
                 Settings.grid_count // 2 - Vector2(1, 1),
                 (0.5, 0)
             ),
+            ANIMATE_BUTTON,
             tuple(Vector2(2, 2.5) * Settings.grid_size),
-            30
         )
 
         # get button center for checking if clicked
@@ -29,12 +29,12 @@ class Button:
     def check_clicked(self, mouse_pos):
         """Check if button is clicked to start animation"""
         if self.center.distance_to(mouse_pos) < Settings.grid_size:
-            self.anim_data.set_timer()
+            self.image_data.start_anim()
 
     def draw(self):
-        self.anim_data.draw()
+        self.image_data.draw()
 
     def update(self):
         """Activate game when animation ended"""
-        if self.anim_data.ended:
-            Stats.game_active = True
+        if self.image_data.anim_ended:
+            States.current_state = GAME_ACTIVE
