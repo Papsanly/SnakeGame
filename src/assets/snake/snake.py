@@ -61,7 +61,6 @@ class Snake:
                 self.body_head.position.offset.length() < 0.03 and \
                 abs(self.direction.get_angle() - self.body_head.direction.get_angle()) in [90, 270]:
             self.body_head.position.offset = Vector2(0, 0)
-            self.direction = self.direction
             self.turning = False
 
             turn = SnakeBodyTurn(
@@ -74,3 +73,4 @@ class Snake:
             self.body_straight.remove(self.body_straight.sprites()[-1])
             self.body_straight.add(SnakeBodyStraight(self.body_turn.sprites()[-1], self.body_head, 'horizontal'))
             саси
+            сам саси

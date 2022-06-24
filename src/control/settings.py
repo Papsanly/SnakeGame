@@ -10,9 +10,9 @@ class Settings:
     """
     # changeable settings by the player
     grid_count: Vector2 = Vector2(15, 15)  # units
-    grid_size: int = 75  # pixels / unit
+    grid_size: int = 40  # pixels / unit
     food_radius: float = 0.5  # percentage of grid square size
-    speed: float = 2  # unit / second
+    speed: float = 7  # unit / second
     fps: int = 120
 
     @classmethod
