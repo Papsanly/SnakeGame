@@ -72,5 +72,3 @@ class Snake:
             self.body_head.direction = self.direction
             self.body_straight.remove(self.body_straight.sprites()[-1])
             self.body_straight.add(SnakeBodyStraight(self.body_turn.sprites()[-1], self.body_head, 'horizontal'))
-            саси
-            сам саси
