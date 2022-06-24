@@ -1,8 +1,8 @@
-from settings import Settings
+from src.control.settings import Settings
 from pygame.math import Vector2
 
 
-class GridPos:
+class GridPosition:
     """Class to manage coordinates of game objects on grid"""
 
     def __init__(self, grid_square: Vector2 | tuple, offset: Vector2 | tuple = Vector2(0, 0)):

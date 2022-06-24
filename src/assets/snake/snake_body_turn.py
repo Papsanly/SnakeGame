@@ -1,19 +1,16 @@
-import time
-
 import pygame
 from pygame.sprite import Sprite
 
-from src.grid_position import GridPos
-from src.image_sequence import ImageSequence
-from src.orientation import Orientation
-from src.settings import Settings
-from src.custom_events import ANIMATE_SNAKE_BODY_TURN
+from src.control.position.grid_position import GridPosition
+from src.control.image_sequence import ImageSequence
+from src.control.position.orientation import Orientation
+from src.control.settings import Settings
 
 
 class SnakeBodyTurn(Sprite):
     """Turning body part of snake class"""
 
-    def __init__(self, position: GridPos, start_direction: Orientation, end_direction: Orientation):
+    def __init__(self, position: GridPosition, start_direction: Orientation, end_direction: Orientation):
         super().__init__()
         # set basic attributes
         self.position = position
@@ -22,9 +19,8 @@ class SnakeBodyTurn(Sprite):
 
         # load image data
         self.image_data = ImageSequence(
-            '../resources/body_turn',
+            'assets\\body_turn',
             self.position,
-            ANIMATE_SNAKE_BODY_TURN,
             frame_rate=int(60 * Settings.speed)
         )
         self.image = self.image_data.image

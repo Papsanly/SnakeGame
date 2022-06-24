@@ -1,26 +1,30 @@
 import pygame
 from pygame.sprite import Sprite
 
-from src.settings import Settings
-from src.snake_body_end import SnakeBodyEnd
-from src.snake_body_turn import SnakeBodyTurn
+from src.control.settings import Settings
+from src.assets.snake.snake_body_end import SnakeBodyEnd
+from src.assets.snake.snake_body_turn import SnakeBodyTurn
 
 
 class SnakeBodyStraight(Sprite):
     """Straight body part of snake class"""
 
-    def __init__(self, obj_start: SnakeBodyEnd | SnakeBodyTurn, obj_end: SnakeBodyEnd | SnakeBodyTurn):
+    def __init__(self, obj_start: SnakeBodyEnd | SnakeBodyTurn | Sprite, obj_end: SnakeBodyEnd | SnakeBodyTurn | Sprite,
+                 orientation=None):
         super().__init__()
 
         self.obj_start = obj_start
         self.obj_end = obj_end
 
-        if obj_start.position.get_coords().y == obj_end.position.get_coords().y:
-            self.orientation = 'horizontal'
-        elif obj_start.position.get_coords().x == obj_end.position.get_coords().x:
-            self.orientation = 'vertical'
+        if not orientation:
+            if obj_start.position.get_coords().y == obj_end.position.get_coords().y:
+                self.orientation = 'horizontal'
+            elif obj_start.position.get_coords().x == obj_end.position.get_coords().x:
+                self.orientation = 'vertical'
+            else:
+                raise ValueError("obj_1 and obj_2 are not aligned")
         else:
-            raise ValueError("obj_1 and obj_2 are not aligned")
+            self.orientation = orientation
 
         if self.orientation == 'horizontal':
             left = self.obj_start.position.get_coords_center().x
@@ -40,16 +44,17 @@ class SnakeBodyStraight(Sprite):
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(3 * (255,))
 
-    def set_obj_end(self, obj_end):
-        self.obj_end = obj_end
-
     def update(self):
         """Update position according to obj_start and obj_end"""
         if self.orientation == 'horizontal':
-            self.rect.x = self.obj_start.position.get_coords_center().x
-            self.rect.width = self.obj_end.position.get_coords_center().x - self.rect.x
+            x_start = self.obj_start.position.get_coords_center().x
+            x_end = self.obj_end.position.get_coords_center().x
+            self.rect.left = x_start
+            self.rect.width = x_end - x_start
         elif self.orientation == 'vertical':
-            self.rect.y = self.obj_start.position.get_coords_center().y
-            self.rect.height = self.obj_end.position.get_coords_center().y - self.rect.y
+            y_start = self.obj_start.position.get_coords_center().y
+            y_end = self.obj_end.position.get_coords_center().y
+            self.rect.top = y_start
+            self.rect.height = y_end - y_start
         else:
             raise ValueError("Orientation must be either horizontal or vertical")

@@ -1,7 +1,7 @@
 import pygame
 
-from screen import Screen
-from settings import Settings
+from src.control.utils import Utils
+from src.control.settings import Settings
 
 
 def draw_grid() -> None:
@@ -9,9 +9,9 @@ def draw_grid() -> None:
     for x, y in zip(range(int(Settings.grid_count.x)), range(int(Settings.grid_count.y))):
         rect_horizontal = pygame.Rect(0, x * Settings.grid_size, Settings.get_resolution().y, width)
         rect_vertical = pygame.Rect(y * Settings.grid_size, 0, width, Settings.get_resolution().x)
-        pygame.draw.rect(Screen.surface, 3*(150,), rect_horizontal)
-        pygame.draw.rect(Screen.surface, 3*(150,), rect_vertical)
+        pygame.draw.rect(Utils.screen_surface, 3*(150,), rect_horizontal)
+        pygame.draw.rect(Utils.screen_surface, 3*(150,), rect_vertical)
 
 
 def fill_bg() -> None:
-    Screen.surface.fill(3 * (50,))
+    Utils.screen_surface.surface.fill(3 * (50,))

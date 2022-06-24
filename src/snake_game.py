@@ -1,17 +1,10 @@
 import pygame
 import os
 
-from src.settings import Settings
-from src.snake import Snake
-from src.button import Button
-from src.screen import Screen
-from src.custom_events import ANIMATE_BUTTON, ANIMATE_SNAKE_BODY_TURN
-from src.states import States, GAME_ACTIVE, START_SCREEN
-from src.time_control import clock
-import src.debug
-
-# change working directory for launching through shortcuts
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+from src.control.settings import Settings
+from src.assets.snake.snake import Snake
+from src.assets.button import Button
+from src.control.utils import Utils, States
 
 
 class SnakeGame:
@@ -21,16 +14,13 @@ class SnakeGame:
         """Initiate pygame and create game objects"""
         pygame.init()
 
-        # create game objects
         self.foods = pygame.sprite.Group()
         self.button = Button()
         self.snake = Snake()
 
-        # create screen
-        self.screen_rect = Screen.rect
         pygame.display.set_caption('Snake')
 
-    def _check_events(self):
+    def _handle_events(self):
         """Check user input and other events"""
         for event in pygame.event.get():
             # handle quit event
@@ -52,30 +42,29 @@ class SnakeGame:
                     self.snake.turn('R')
 
             # handle custom events
-            elif event.type == ANIMATE_BUTTON:
+            elif event.type == self.button.image_data.anim_event:
                 self.button.image_data.update()
-            elif event.type == ANIMATE_SNAKE_BODY_TURN:
-                for sprite in self.snake.body_turn.sprites():
-                    if not sprite.image_data.anim_ended:
-                        sprite.image_data.update()
+            for sprite in self.snake.body_turn.sprites():
+                if event.type == sprite.image_data.anim_event:
+                    sprite.image_data.update()
 
     def _update_objects(self):
         """Update game objects based on active state"""
-        if States.current_state == GAME_ACTIVE:
+        if Utils.current_state == States.GAME_ACTIVE:
             self.snake.update()
-        elif States.current_state == START_SCREEN:
+        elif Utils.current_state == States.START_SCREEN:
             self.button.update()
 
     def _update_screen(self):
         """Rerender updated objects to screen"""
         # debugging tools
-        src.debug.fill_bg()
-        src.debug.draw_grid()
+        # src.debug.fill_bg()
+        # src.debug.draw_grid()
 
         # draw game objects based on states
-        if States.current_state == GAME_ACTIVE:
+        if Utils.current_state == States.GAME_ACTIVE:
             self.snake.draw()
-        elif States.current_state == START_SCREEN:
+        elif Utils.current_state == States.START_SCREEN:
             self.button.draw()
 
         # update screen
@@ -84,12 +73,15 @@ class SnakeGame:
     def run(self):
         """Run main game loop"""
         while True:
-            self._check_events()
+            self._handle_events()
             self._update_objects()
             self._update_screen()
-            clock.tick(Settings.fps)
+            Utils.clock.tick(Settings.fps)
 
 
 if __name__ == '__main__':
+    # change working directory for launching through shortcuts
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
     snake_game = SnakeGame()
     snake_game.run()
