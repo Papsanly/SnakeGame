@@ -13,7 +13,7 @@ class SnakeBodyEnd(Sprite):
     def __init__(self, position: GridPosition):
         super().__init__()
 
-        self.image = pygame.image.load(Utils.working_dir + 'assets\\snake_end.bmp')
+        self.image = pygame.image.load(Utils.working_dir + '../assets/snake_end.bmp')
         self.image = pygame.transform.smoothscale(self.image, 2*(Settings.grid_size,))
         self.position = position
         self.direction = Orientation(Vector2(0, -1))

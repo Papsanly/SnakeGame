@@ -19,7 +19,7 @@ class SnakeBodyTurn(Sprite):
 
         # load image data
         self.image_data = ImageSequence(
-            'assets\\body_turn',
+            '../assets/body_turn',
             self.position,
             frame_rate=int(60 * Settings.speed)
         )

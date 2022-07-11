@@ -13,10 +13,9 @@ class Button:
         """Init button attributes"""
         # get all images and set current image to the first one
         self.image_data = ImageSequence(
-            'assets\\start',
+            '../assets/start',
             GridPosition(
-                Settings.grid_count // 2 - Vector2(1, 1),
-                (0.5, 0)
+                Settings.grid_count // 2 - Vector2(1, 1), (0.5, 0)
             ),
             tuple(Vector2(2, 2.5) * Settings.grid_size),
         )

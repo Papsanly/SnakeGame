@@ -9,7 +9,7 @@ class States(Enum):
     """Enumeration of game states"""
 
     GAME_ACTIVE = 'game active'
-    START_SCREEN = 'Start screen'
+    START_SCREEN = 'start screen'
 
 
 @dataclass
@@ -20,4 +20,4 @@ class Utils:
     clock = pygame.time.Clock()
     screen_surface = pygame.display.set_mode(Settings.get_resolution())
     screen_rect = screen_surface.get_rect()
-    working_dir = str(pathlib.Path().resolve()) + '\\'
+    working_dir = str(pathlib.Path().resolve()) + '/'

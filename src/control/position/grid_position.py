@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from src.control.settings import Settings
 from pygame.math import Vector2
 
@@ -10,6 +12,12 @@ class GridPosition:
         self.x = self.xy.x
         self.y = self.xy.y
         self.offset = Vector2(offset)
+
+    def __add__(self, other: GridPosition) -> GridPosition:
+        result_coords = self.get_coords() + other.get_coords()
+        result_square = result_coords // Settings.grid_size
+        result_offset = result_coords.x % Settings.grid_size, result_coords.y % Settings.grid_size
+        return GridPosition(result_square, result_offset)
 
     def get_coords(self) -> Vector2:
         """Get exact pixel position on upper right corner of the object"""

@@ -1,8 +1,9 @@
+from __future__ import annotations
 from pygame.math import Vector2
 
 
 class Orientation:
-    """Class to manage object orienation in a grid"""
+    """Class to manage object orientation in a grid"""
 
     def __init__(self, direction: str | Vector2 | int | float):
         # set initial direction attribute
@@ -11,37 +12,36 @@ class Orientation:
         # check if valid for all types of direction
         self.get_name()
 
+    def __eq__(self, other):
+        return self.get_name() == other.get_name()
+
+    def __neg__(self) -> Orientation:
+        return Orientation(-self.get_vector())
+
+    def __ne__(self, other):
+        return self.get_name() != other.get_name()
+
     def get_name(self) -> str:
         """Convert direction to name: 'U', 'R", 'L' or 'D'"""
         if isinstance(self.direction, str):
             if self.direction in ['U', 'D', 'L', 'R']:
                 return self.direction
-            else:
-                raise ValueError('Invalid direction')
         elif isinstance(self.direction, Vector2):
             direction = tuple(self.direction)
-            if direction == (1, 0):
-                return 'R'
-            elif direction == (-1, 0):
-                return 'L'
-            elif direction == (0, 1):
-                return 'D'
-            elif direction == (0, -1):
-                return 'U'
-            else:
-                raise ValueError('Invalid direction')
+            match direction:
+                case (1, 0): return 'R'
+                case (-1, 0): return 'L'
+                case (0, 1): return 'D'
+                case (0, -1): return 'U'
         elif isinstance(self.direction, (int, float)):
             direction = int(self.direction) % 360
-            if direction == 0:
-                return 'U'
-            elif direction == 90:
-                return 'R'
-            elif direction == 180:
-                return 'D'
-            elif direction == 270:
-                return 'L'
-            else:
-                raise ValueError('Invalid direction')
+            match direction:
+                case 0: return 'U'
+                case 90: return 'R'
+                case 180: return 'D'
+                case 270: return 'L'
+        else:
+            raise ValueError('Invalid direction')
 
     def get_vector(self) -> Vector2:
         self.direction = self.get_name()

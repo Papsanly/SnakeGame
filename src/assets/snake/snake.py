@@ -7,7 +7,6 @@ from src.control.utils import Utils
 from src.control.settings import Settings
 from src.assets.snake.snake_body_end import SnakeBodyEnd
 from src.assets.snake.snake_body_straight import SnakeBodyStraight
-from src.assets.snake.snake_body_turn import SnakeBodyTurn
 
 
 class Snake:
@@ -38,11 +37,6 @@ class Snake:
             self.body_head, self.body_tail
         ))
 
-    def turn(self, direction):
-        direction = Orientation(direction)
-        self.turning = True
-        self.direction = direction
-
     def draw(self) -> None:
         self.body_head.draw()
         self.body_tail.draw()
@@ -55,20 +49,3 @@ class Snake:
         self.body_tail.update()
         self.body_straight.update()
         self.body_turn.update()
-
-        # check if on grid and possible to turn
-        if self.turning and \
-                self.body_head.position.offset.length() < 0.03 and \
-                abs(self.direction.get_angle() - self.body_head.direction.get_angle()) in [90, 270]:
-            self.body_head.position.offset = Vector2(0, 0)
-            self.turning = False
-
-            turn = SnakeBodyTurn(
-                self.body_head.position,
-                self.body_head.direction,
-                self.direction
-            )
-            self.body_turn.add(turn)
-            self.body_head.direction = self.direction
-            self.body_straight.remove(self.body_straight.sprites()[-1])
-            self.body_straight.add(SnakeBodyStraight(self.body_turn.sprites()[-1], self.body_head, 'horizontal'))

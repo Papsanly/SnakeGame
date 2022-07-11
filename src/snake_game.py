@@ -31,15 +31,6 @@ class SnakeGame:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self.button.check_clicked(mouse_pos)
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    self.snake.turn('U')
-                elif event.key == pygame.K_DOWN:
-                    self.snake.turn('D')
-                elif event.key == pygame.K_LEFT:
-                    self.snake.turn('L')
-                elif event.key == pygame.K_RIGHT:
-                    self.snake.turn('R')
 
             # handle custom events
             elif event.type == self.button.image_data.anim_event:
