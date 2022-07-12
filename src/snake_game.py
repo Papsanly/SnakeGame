@@ -1,10 +1,8 @@
 import pygame
 import os
 
-from src.control.settings import Settings
-from src.assets.snake.snake import Snake
-from src.assets.button import Button
-from src.control.utils import Utils, States
+from src.settings import Settings
+from src.utils import Utils
 
 
 class SnakeGame:
@@ -14,9 +12,7 @@ class SnakeGame:
         """Initiate pygame and create game objects"""
         pygame.init()
 
-        self.foods = pygame.sprite.Group()
-        self.button = Button()
-        self.snake = Snake()
+        # TODO: create game objects
 
         pygame.display.set_caption('Snake')
 
@@ -27,36 +23,12 @@ class SnakeGame:
             if event.type == pygame.QUIT:
                 exit(0)
 
-            # handle user input events
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                self.button.check_clicked(mouse_pos)
-
-            # handle custom events
-            elif event.type == self.button.image_data.anim_event:
-                self.button.image_data.update()
-            for sprite in self.snake.body_turn.sprites():
-                if event.type == sprite.image_data.anim_event:
-                    sprite.image_data.update()
-
     def _update_objects(self):
         """Update game objects based on active state"""
-        if Utils.current_state == States.GAME_ACTIVE:
-            self.snake.update()
-        elif Utils.current_state == States.START_SCREEN:
-            self.button.update()
+        pass
 
     def _update_screen(self):
         """Rerender updated objects to screen"""
-        # debugging tools
-        # src.debug.fill_bg()
-        # src.debug.draw_grid()
-
-        # draw game objects based on states
-        if Utils.current_state == States.GAME_ACTIVE:
-            self.snake.draw()
-        elif Utils.current_state == States.START_SCREEN:
-            self.button.draw()
 
         # update screen
         pygame.display.update()

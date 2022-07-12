@@ -1,7 +1,7 @@
 import pygame
 
-from src.control.utils import Utils
-from src.control.settings import Settings
+from src.utils import Utils
+from src.settings import Settings
 
 
 def draw_grid() -> None:

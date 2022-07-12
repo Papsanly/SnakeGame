@@ -2,7 +2,7 @@ import pygame
 import pathlib
 from dataclasses import dataclass
 from enum import Enum
-from src.control.settings import Settings
+from src.settings import Settings
 
 
 class States(Enum):
