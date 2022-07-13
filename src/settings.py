@@ -15,11 +15,16 @@ class Settings:
     fps = 30
 
     @classmethod
+    def get_grid_square(cls) -> tuple[int, int]:
+        """Returns tuple with values of grid size"""
+        return Settings.grid_size, Settings.grid_size
+
+    @classmethod
     def get_resolution(cls) -> Vector2:
         """Get pixel resolution tuple"""
         return cls.grid_count * cls.grid_size
 
     @classmethod
-    def get_speed(cls):
+    def get_speed(cls) -> float:
         """Get amount of pixels that snake moves per frame"""
         return cls.grid_size * cls.speed / cls.fps

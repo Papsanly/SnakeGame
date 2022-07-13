@@ -2,7 +2,8 @@ import pygame
 import os
 
 from src.settings import Settings
-from src.utils import Utils
+from src.utils import Utils, Groups
+from src.snake import Snake
 
 
 class SnakeGame:
@@ -11,24 +12,27 @@ class SnakeGame:
     def __init__(self):
         """Initiate pygame and create game objects"""
         pygame.init()
-
-        # TODO: create game objects
-
         pygame.display.set_caption('Snake')
 
-    def _handle_events(self):
+        # create game objects
+        self.snake = Snake()
+
+    def handle_events(self):
         """Check user input and other events"""
         for event in pygame.event.get():
-            # handle quit event
-            if event.type == pygame.QUIT:
-                exit(0)
+            match event.type:
 
-    def _update_objects(self):
+                # handle quit event
+                case pygame.QUIT:
+                    exit(0)
+
+    def update_objects(self):
         """Update game objects based on active state"""
-        pass
+        Groups.dynamic_sprites.update()
 
-    def _update_screen(self):
+    def update_screen(self):
         """Rerender updated objects to screen"""
+        Groups.visible_sprites.draw(Utils.screen_surface)
 
         # update screen
         pygame.display.update()
@@ -36,9 +40,9 @@ class SnakeGame:
     def run(self):
         """Run main game loop"""
         while True:
-            self._handle_events()
-            self._update_objects()
-            self._update_screen()
+            self.handle_events()
+            self.update_objects()
+            self.update_screen()
             Utils.clock.tick(Settings.fps)
 
 

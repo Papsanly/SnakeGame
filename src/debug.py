@@ -14,4 +14,4 @@ def draw_grid() -> None:
 
 
 def fill_bg() -> None:
-    Utils.screen_surface.surface.fill(3 * (50,))
+    Utils.screen_surface.fill(3 * (50,))
