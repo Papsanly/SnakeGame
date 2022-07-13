@@ -18,6 +18,7 @@ class Groups:
 
     visible_sprites = pygame.sprite.Group()
     dynamic_sprites = pygame.sprite.Group()
+    snake_body_straight_sprites = pygame.sprite.Group()
 
 
 @dataclass

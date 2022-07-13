@@ -21,7 +21,6 @@ class SnakeGame:
         """Check user input and other events"""
         for event in pygame.event.get():
             match event.type:
-
                 # handle quit event
                 case pygame.QUIT:
                     exit(0)
@@ -29,9 +28,14 @@ class SnakeGame:
     def update_objects(self):
         """Update game objects based on active state"""
         Groups.dynamic_sprites.update()
+        Groups.snake_body_straight_sprites.update(
+            pos_1=self.snake.body_head.position,
+            pos_2=self.snake.body_tail.position
+        )
 
     def update_screen(self):
         """Rerender updated objects to screen"""
+        Utils.screen_surface.fill((0, 0, 0))
         Groups.visible_sprites.draw(Utils.screen_surface)
 
         # update screen
