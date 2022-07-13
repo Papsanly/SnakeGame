@@ -53,7 +53,9 @@ class SnakeBodyEnd(pygame.sprite.Sprite):
     def update(self):
         """Move along direction with snake speed"""
 
-        self.position = self.position.moved(self.direction * Settings.get_snake_speed() / Settings.grid_size)
+        self.position = self.position.moved(
+            self.direction * Settings.get_snake_speed() / Settings.grid_size
+        )
         self.rect.center = self.position.center
 
 
