@@ -9,8 +9,14 @@ class TilePosition:
         if isinstance(tile, str):
             if tile == 'center':
                 self.tile = Settings.tiles_count // 2
+        else:
+            self.tile = Vector2(tile)
 
-        self.tile = Vector2(tile)
+    def __eq__(self, other):
+        return self.topleft == other.topleft
+
+    def __hash__(self):
+        return hash(tuple(self.topleft))
 
     @property
     def left(self):

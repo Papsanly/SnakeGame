@@ -7,6 +7,8 @@ class Settings:
 
     tiles_count = Vector2(11, 11)
     tile_size = 70
+    snake_speed = 2
+    fps = 60
 
     @classmethod
     def get_resolution(cls):
