@@ -1,58 +1,30 @@
 import pygame
-import os
 
 from src.settings import Settings
-from src.utils import Utils, Groups
 from src.snake import Snake
 
 
 class SnakeGame:
-    """Main class to control game logic and manage objects"""
 
     def __init__(self):
-        """Initiate pygame and create game objects"""
-        pygame.init()
-        pygame.display.set_caption('Snake')
 
-        # create game objects
+        self.screen_surf = pygame.display.set_mode(Settings.get_resolution())
+        pygame.display.set_caption('Snake Game')
+        self.screen_rect = self.screen_surf.get_rect()
+
         self.snake = Snake()
 
     def handle_events(self):
-        """Check user input and other events"""
         for event in pygame.event.get():
             match event.type:
-                # handle quit event
                 case pygame.QUIT:
                     exit(0)
 
-    def update_objects(self):
-        """Update game objects based on active state"""
-        Groups.dynamic_sprites.update()
-        Groups.snake_body_straight_sprites.update(
-            pos_1=self.snake.body_head.position,
-            pos_2=self.snake.body_tail.position
-        )
-
-    def update_screen(self):
-        """Rerender updated objects to screen"""
-        Utils.screen_surface.fill((0, 0, 0))
-        Groups.visible_sprites.draw(Utils.screen_surface)
-
-        # update screen
-        pygame.display.update()
-
     def run(self):
-        """Run main game loop"""
         while True:
             self.handle_events()
-            self.update_objects()
-            self.update_screen()
-            Utils.clock.tick(Settings.fps)
 
 
 if __name__ == '__main__':
-    # change working directory for launching through shortcuts
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
     snake_game = SnakeGame()
     snake_game.run()
