@@ -17,43 +17,21 @@ class SnakeGame:
         self.screen_rect = self.screen_surf.get_rect()
         self.clock = pygame.time.Clock()
 
+        # create groups
+        self.visible_sprites = pygame.sprite.Group()
+        self.dynamic_sprites = pygame.sprite.Group()
+
         # object creation
         self.snake = Snake()
         self.food = Food()
         self.ui = UI()
 
-    def handle_events(self):
-        for event in pygame.event.get():
-            match event.type:
-                case pygame.QUIT:
-                    exit(0)
-
-                case pygame.KEYDOWN:
-                    match event.key:
-                        case pygame.K_UP:
-                            self.snake.turn((0, -1))
-                        case pygame.K_DOWN:
-                            self.snake.turn((0, 1))
-                        case pygame.K_LEFT:
-                            self.snake.turn((-1, 0))
-                        case pygame.K_RIGHT:
-                            self.snake.turn((1, 0))
-
-                case self.snake.movement_event:
-                    self.snake.body_group.update()
-
-    def update_screen(self):
-        self.screen_surf.fill((0, 0, 0))
-        self.snake.draw(self.screen_surf)
-        pygame.display.update()
-
-    def run(self):
+    def run(self) -> None:
         while True:
-            self.handle_events()
-            self.update_screen()
-            for position, direction in self.snake.body_group.direction_map.items():
-                print(f'{position.tile}: {tuple(direction)}', end=', ')
-            print()
+            self.dynamic_sprites.update()
+            self.screen_surf.fill((0, 0, 0))
+            self.visible_sprites.draw(self.screen_surf)
+            pygame.display.update()
             self.clock.tick(Settings.fps)
 
 
