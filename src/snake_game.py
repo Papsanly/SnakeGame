@@ -24,7 +24,7 @@ class SnakeGame:
         self.visible_sprites = pygame.sprite.Group()
         self.dynamic_sprites = pygame.sprite.Group()
 
-        # object creation
+        # create objects
         self.snake = Snake()
         self.food = Food()
         self.ui = UI()
