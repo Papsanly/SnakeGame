@@ -1,17 +1,22 @@
 import pygame
 
 from src.settings import Settings
-from src.snake import Snake
-from src.food import Food
-from src.ui import UI
+from src.assets.snake import Snake
+from src.assets.food import Food
+from src.assets.ui import UI
 from src.utils import Utils
 
 
 class SnakeGame:
-
+    """
+    Main game class
+    """
     def __init__(self) -> None:
+        """
+        Initiates pygame, creates objects and groups
+        """
 
-        # basic pygame setup
+        # pygame setup
         pygame.init()
         pygame.display.set_caption('Snake Game')
 
@@ -25,11 +30,23 @@ class SnakeGame:
         self.ui = UI()
 
     def run(self) -> None:
+        """
+        Starts the main game event loop
+        """
         while True:
+            # handle quiting
+            if pygame.event.get(pygame.QUIT):
+                return
+
+            # update objects
             self.dynamic_sprites.update()
+
+            # update screen
             Utils.screen_surf.fill((0, 0, 0))
             self.visible_sprites.draw(Utils.screen_surf)
             pygame.display.update()
+
+            # set fps
             Utils.clock.tick(Settings.fps)
 
 
