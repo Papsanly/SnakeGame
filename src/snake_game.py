@@ -13,7 +13,7 @@ class SnakeGame:
     """
     def __init__(self) -> None:
         """
-        Initiates pygame, creates objects and groups
+        Initiate pygame, create objects and groups
         """
 
         # pygame setup
@@ -25,14 +25,15 @@ class SnakeGame:
         self.dynamic_sprites = pygame.sprite.Group()
 
         # create objects
-        self.snake = Snake()
-        self.food = Food()
-        self.ui = UI()
+        self.snake = Snake(self.visible_sprites, self.dynamic_sprites)
+        self.food = Food(self.visible_sprites)
+        self.ui = UI(self.visible_sprites, self.dynamic_sprites)
 
     def run(self) -> None:
         """
         Starts the main game event loop
         """
+
         while True:
             # handle quiting
             if pygame.event.get(pygame.QUIT):

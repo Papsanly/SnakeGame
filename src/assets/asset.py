@@ -1,8 +1,13 @@
-import pygame
+from typing import Sequence
+
+from pygame.sprite import Sprite, Group
 
 
-class AssetGroup(pygame.sprite.Group):
+class AssetGroup(Group):
     """
     Baseclass, which is a pygame group, for any game asset
     """
-    pass
+
+    def __init__(self, *sprites: Sprite | Sequence[Sprite] | Group):
+        super().__init__(*sprites)
+
