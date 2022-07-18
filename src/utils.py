@@ -6,7 +6,10 @@ from src.settings import Settings
 
 class Utils:
 
+    screen_surf = pygame.display.set_mode(Settings.get_resolution())
+    screen_rect = screen_surf.get_rect()
     working_dir = str(pathlib.Path().resolve()) + '/'
+    clock = pygame.time.Clock()
 
     @classmethod
     def get_abspath(cls, relative_path):
