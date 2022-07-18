@@ -7,7 +7,7 @@ class Settings:
 
     tiles_count = Vector2(11, 11)
     tile_size = 70
-    snake_speed = 2
+    snake_speed = 4
     fps = 60
 
     @classmethod

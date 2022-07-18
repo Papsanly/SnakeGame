@@ -2,18 +2,25 @@ import pygame
 
 from src.settings import Settings
 from src.snake import Snake
+from src.food import Food
+from src.ui import UI
 
 
 class SnakeGame:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
+        # basic pygame setup
+        pygame.init()
         self.screen_surf = pygame.display.set_mode(Settings.get_resolution())
         pygame.display.set_caption('Snake Game')
         self.screen_rect = self.screen_surf.get_rect()
         self.clock = pygame.time.Clock()
 
+        # object creation
         self.snake = Snake()
+        self.food = Food()
+        self.ui = UI()
 
     def handle_events(self):
         for event in pygame.event.get():
