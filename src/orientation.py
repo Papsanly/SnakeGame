@@ -40,19 +40,53 @@ class Orientation:
                           rotation angle: 0 - 'R', 90 - 'U', 180 - 'L', 270 - 'D'
         """
 
+        self.__dir_internal = direction
+
+    @property
+    def name(self):
         try:
-            if isinstance(direction, str):
-                self.name = direction
-                self.vector = Vector2(self.__name_vector_dict[direction])
-                self.angle = self.__name_angle_dict[direction]
-            elif isinstance(direction, (Vector2, tuple)):
-                self.name = self.__vector_name_dict[tuple(direction)]
-                self.vector = Vector2(direction)
-                self.angle = self.__vector_angle_dict[tuple(direction)]
-            elif isinstance(direction, (int, float)):
-                self.name = self.__angle_name_dict[int(direction)]
-                self.vector = Vector2(self.__angle_vector_dict[int(direction)])
-                self.angle = int(direction)
+            if isinstance(self.__dir_internal, str):
+                return self.__dir_internal
+            elif isinstance(self.__dir_internal, (Vector2, tuple)):
+                return self.__vector_name_dict[tuple(self.__dir_internal)]
+            elif isinstance(self.__dir_internal, (int, float)):
+                return self.__angle_name_dict[self.__dir_internal]
+            elif isinstance(self.__dir_internal, Orientation):
+                return self.__dir_internal.name
+            else:
+                raise KeyError
+        except KeyError:
+            raise ValueError('Invalid direction!')
+
+    @property
+    def vector(self):
+        try:
+            if isinstance(self.__dir_internal, str):
+                return Vector2(self.__name_vector_dict[self.__dir_internal])
+            elif isinstance(self.__dir_internal, (Vector2, tuple)):
+                return Vector2(self.__dir_internal)
+            elif isinstance(self.__dir_internal, (int, float)):
+                return Vector2(self.__angle_vector_dict[int(self.__dir_internal)])
+            elif isinstance(self.__dir_internal, Orientation):
+                return self.__dir_internal.vector
+            else:
+                raise KeyError
+        except KeyError:
+            raise ValueError('Invalid direction!')
+
+    @property
+    def angle(self):
+        try:
+            if isinstance(self.__dir_internal, str):
+                return self.__name_angle_dict[self.__dir_internal]
+            elif isinstance(self.__dir_internal, (Vector2, tuple)):
+                return self.__vector_angle_dict[tuple(self.__dir_internal)]
+            elif isinstance(self.__dir_internal, (int, float)):
+                return int(self.__dir_internal)
+            elif isinstance(self.__dir_internal, Orientation):
+                return self.__dir_internal.angle
+            else:
+                raise KeyError
         except KeyError:
             raise ValueError('Invalid direction!')
 

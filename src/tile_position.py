@@ -11,7 +11,7 @@ class TilePosition:
     Class to manage object positioning on grid
     """
 
-    def __init__(self, tile: PositionStr | Vector2 | tuple) -> None:
+    def __init__(self, tile: TilePosition | PositionStr | Vector2 | tuple) -> None:
         """
         :param tile: Vector or tuple representing tile position or string 'center'
         """
@@ -22,6 +22,8 @@ class TilePosition:
                 case 'topright': self.tile = Vector2(Settings.tiles_count.x, 0)
                 case 'bottomleft': self.tile = Vector2(0, Settings.tiles_count.x)
                 case 'bottomright': self.tile = Settings.tiles_count
+        elif isinstance(tile, TilePosition):
+            self.tile = tile.tile
         else:
             self.tile = Vector2(tile)
 

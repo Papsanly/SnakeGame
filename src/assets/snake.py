@@ -1,6 +1,7 @@
 from typing import Literal
 
 import pygame.event
+from pygame import Vector2
 from pygame.sprite import Sprite
 
 from src.assets.asset import AssetGroup
@@ -13,6 +14,9 @@ BodyType = Literal['end', 'turn', 'straight']
 
 
 class Snake(AssetGroup):
+    """
+    Snake object. Created at the center with length one
+    """
 
     def __init__(self):
         super().__init__()
@@ -20,24 +24,38 @@ class Snake(AssetGroup):
         self.length = 1
         self.direction_map: dict[TilePosition, Orientation] = {}
 
-        self.add(
-            SnakeBodyEnd('center', 'U'),
-            SnakeBodyEnd('center', 'U', shift=(0, 1), tail=True),
-        )
+        self.head = SnakeBodyEnd('center', 'U')
+        self.tail = SnakeBodyEnd('center', 'U', shift=(0, 1), tail=True)
+        self.add(self.head, self.tail)
 
         self.move_event = pygame.event.custom_type()
         pygame.time.set_timer(self.move_event, int(1000 / Settings.snake_speed))
 
+    def turn(self, direction: DirectionStr | DirectionAngle | Vector2) -> None:
+        """
+        Turn the snake in given direction
+        :param direction: Direction to turn the snake to
+        """
+        self.direction_map[self.head.position] = Orientation(direction)
+        self.add(SnakeBodyTurn(self.head.position, self.head.direction, direction))
+
     def update(self) -> None:
+        """
+        Move snake parts according to direction map
+        """
         for sprite in self.sprites():
-            if hasattr(sprite, 'position'):
+            if hasattr(sprite, 'position') and hasattr(sprite, 'direction') and hasattr(sprite, 'tail'):
+                old_direction = sprite.direction
                 new_direction = self.direction_map.get(sprite.position)
                 sprite.update(new_direction)
+                if sprite.tail:
+                    self.direction_map.pop(old_direction)
 
 
 class SnakeBody(Sprite):
 
-    def __init__(self, position: PositionStr, direction: DirectionStr | DirectionAngle,
+    def __init__(self, position: TilePosition | PositionStr,
+                 direction: Orientation | DirectionStr | DirectionAngle,
                  body_type: BodyType, shift=(0, 0)):
         super().__init__()
 
@@ -51,6 +69,7 @@ class SnakeBody(Sprite):
         self.position += self.direction.vector
         self.rect.center = self.position.center
 
+    def rotate(self, direction):
 
 class SnakeBodyEnd(SnakeBody):
 

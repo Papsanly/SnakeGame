@@ -35,6 +35,16 @@ class SnakeGame:
                     exit(0)
                 case self.snake.move_event:
                     self.snake.update()
+                case pygame.KEYDOWN:
+                    match event.key:
+                        case pygame.K_UP:
+                            self.snake.turn('U')
+                        case pygame.K_DOWN:
+                            self.snake.turn('D')
+                        case pygame.K_LEFT:
+                            self.snake.turn('L')
+                        case pygame.K_RIGHT:
+                            self.snake.turn('R')
 
     def _update_objects(self) -> None:
         """
