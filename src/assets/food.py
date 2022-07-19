@@ -1,5 +1,5 @@
-from src.assets.asset import AssetGroup
+from pygame.sprite import Group
 
 
-class Food(AssetGroup):
+class Food(Group):
     pass

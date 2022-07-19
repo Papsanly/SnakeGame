@@ -4,9 +4,8 @@ from typing import Literal
 
 import pygame.event
 from pygame import Vector2
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 
-from src.assets.asset import AssetGroup
 from src.orientation import Orientation, DirectionStr, DirectionAngle
 from src.settings import Settings
 from src.tile_position import TilePosition, PositionStr
@@ -15,7 +14,7 @@ from src.utils import Utils
 BodyType = Literal['end', 'turn', 'straight']
 
 
-class Snake(AssetGroup):
+class Snake(Group):
     """
     Snake object. Created at the center with length one
     """
@@ -28,8 +27,11 @@ class Snake(AssetGroup):
 
         self.turn_dirs = []
         self.head = SnakeBodyEnd('center', 'U')
-        self.tail = SnakeBodyEnd('center', 'U', shift=(0, 2), tail=True)
-        self.add(self.head, SnakeBodyStraight('center', 'U', shift=(0, 1)), self.tail)
+        self.tail = SnakeBodyEnd('center', 'U', shift=(0, 3), tail=True)
+        self.add(self.head,
+                 SnakeBodyStraight('center', 'U', shift=(0, 1)),
+                 SnakeBodyStraight('center', 'U', shift=(0, 2)),
+                 self.tail)
 
         self.move_event = pygame.event.custom_type()
         pygame.time.set_timer(self.move_event, int(1000 / Settings.snake_speed))
@@ -43,7 +45,6 @@ class Snake(AssetGroup):
 
         if (curr_dir - Orientation(direction)).angle in (90, 270):
             self.turn_dirs.append(Orientation(direction))
-            print(self.turn_dirs)
 
     def update(self) -> None:
         """
@@ -147,13 +148,3 @@ class SnakeBodyTurn(SnakeBody):
 
         self.start_direction = start_direction
         self.end_direction = end_direction
-
-    # def __eq__(self, other: SnakeBodyTurn) -> bool:
-    #     return self.position == other.position and \
-    #            ((self.start_direction == other.start_direction and
-    #              self.end_direction == other.end_direction) or
-    #             (self.start_direction == -other.end_direction and
-    #              self.end_direction == -other.start_direction))
-    #
-    # def __hash__(self):
-    #     return hash((self.position, self.start_direction.name, self.end_direction.name))
