@@ -15,39 +15,51 @@ class SnakeGame:
         """
         Initiate pygame, create objects and groups
         """
-
         # pygame setup
         pygame.init()
         pygame.display.set_caption('Snake Game')
 
-        # create groups
-        self.visible_sprites = pygame.sprite.Group()
-        self.dynamic_sprites = pygame.sprite.Group()
-
         # create objects
-        self.snake = Snake(self.visible_sprites, self.dynamic_sprites)
-        self.food = Food(self.visible_sprites)
-        self.ui = UI(self.visible_sprites, self.dynamic_sprites)
+        self.snake = Snake()
+        self.food = Food()
+        self.ui = UI()
+
+    def _handle_events(self) -> None:
+        """
+        Handle pygame event queue
+        """
+        for event in pygame.event.get():
+            # handle quiting event
+            match event.type:
+                case pygame.QUIT:
+                    exit(0)
+                case self.snake.move_event:
+                    self.snake.update()
+
+    def _update_objects(self) -> None:
+        """
+        Update dynamic objects
+        """
+        self.ui.update()
+
+    def _update_screen(self) -> None:
+        """
+        Redraw and update game window surface
+        """
+        Utils.screen_surf.fill((0, 0, 0))
+        self.snake.draw(Utils.screen_surf)
+        self.food.draw(Utils.screen_surf)
+        self.ui.draw(Utils.screen_surf)
+        pygame.display.update()
 
     def run(self) -> None:
         """
         Starts the main game event loop
         """
-
         while True:
-            # handle quiting
-            if pygame.event.get(pygame.QUIT):
-                return
-
-            # update objects
-            self.dynamic_sprites.update()
-
-            # update screen
-            Utils.screen_surf.fill((0, 0, 0))
-            self.visible_sprites.draw(Utils.screen_surf)
-            pygame.display.update()
-
-            # set fps
+            self._handle_events()
+            self._update_objects()
+            self._update_screen()
             Utils.clock.tick(Settings.fps)
 
 

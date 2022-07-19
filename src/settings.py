@@ -10,7 +10,7 @@ class Settings:
 
     tiles_count = Vector2(11, 11)  # amount of tiles on x and y-axis
     tile_size = 70  # pixel size of one tile
-    snake_speed = 4.0  # amount of tiles snake goes through per second
+    snake_speed = 2.0  # amount of tiles snake goes through per second
     fps = 60
 
     @classmethod
