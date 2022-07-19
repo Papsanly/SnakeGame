@@ -18,6 +18,8 @@ class Utils:
     def get_abspath(cls, relative_path: str) -> str:
         """
         Returns absolute path from relative one
+
+        :param relative_path: Relative path from current working directory to asset image
         """
         return cls.working_dir + relative_path
 
@@ -25,6 +27,8 @@ class Utils:
     def load_tile_image(cls, relative_path: str):
         """
         Returns scaled to fit a tile pygame surface with loaded image
+
+        :param relative_path: Relative path from current working directory to asset image
         """
         image = pygame.image.load(cls.get_abspath(relative_path))
         return pygame.transform.smoothscale(image, Settings.get_tile_vec())
