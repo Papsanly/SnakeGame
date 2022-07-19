@@ -24,6 +24,11 @@ class Utils:
         return cls.working_dir + relative_path
 
     @classmethod
+    def hasattrs(cls, obj, attrs: str):
+        hasattr_lst = [hasattr(obj, attr) for attr in attrs.split()]
+        return hasattr_lst
+
+    @classmethod
     def load_tile_image(cls, relative_path: str):
         """
         Returns scaled to fit a tile pygame surface with loaded image

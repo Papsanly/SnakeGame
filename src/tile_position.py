@@ -27,6 +27,9 @@ class TilePosition:
         else:
             self.tile = Vector2(tile)
 
+    def __repr__(self):
+        return str(self.topleft)
+
     def __eq__(self, other: TilePosition) -> bool:
         """
         :param other: Another TilePosition object

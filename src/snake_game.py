@@ -29,7 +29,6 @@ class SnakeGame:
         Handle pygame event queue
         """
         for event in pygame.event.get():
-            # handle quiting event
             match event.type:
                 case pygame.QUIT:
                     exit(0)

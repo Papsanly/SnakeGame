@@ -42,6 +42,22 @@ class Orientation:
 
         self.__dir_internal = direction
 
+    def __add__(self, other: Orientation) -> Orientation:
+        """
+        Add angles mod 360
+        :param other: Another Orientation object
+        :return: Another Orientation object
+        """
+        return Orientation((self.angle + other.angle) % 360)
+
+    def __sub__(self, other: Orientation) -> Orientation:
+        """
+        Subtract angles mod 360
+        :param other: Another Orientation object
+        :return: Another Orientation object
+        """
+        return Orientation((self.angle - other.angle) % 360)
+
     @property
     def name(self):
         try:
