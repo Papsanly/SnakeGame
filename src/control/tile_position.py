@@ -39,7 +39,7 @@ class TilePosition:
 
     def __hash__(self) -> hash:
         """
-        :return: Hash value for hashmaps
+        :return: Hash value
         """
         return hash(tuple(self.topleft))
 
@@ -85,11 +85,34 @@ class TilePosition:
         """
         return self.topleft + Settings.get_tile_vec() // 2
 
-    def __add__(self, other: Vector2 | tuple) -> TilePosition:
+    def __mul__(self, other: int) -> TilePosition:
+        """
+        Multiply tile coordinates by number
+        :param other: Integer to multiply by
+        :return: Another tileimage object
+        """
+        return TilePosition(self.tile * other)
+
+    def __add__(self, other: TilePosition | Vector2 | tuple) -> TilePosition:
         """
         Adds coresponding coordinates of tile attribute
 
         :param other: Vector or tuple with amount of tile coordinates to add
         :return: Another TilePosition object with new tile coords
         """
-        return TilePosition(self.tile + Vector2(other))
+        if isinstance(other, TilePosition):
+            return TilePosition(self.tile + other.tile)
+        else:
+            return TilePosition(self.tile + Vector2(other))
+
+    def __sub__(self, other: TilePosition | Vector2 | tuple) -> TilePosition:
+        """
+        Subtracts coresponding coordinates of tile attribute
+
+        :param other: Vector or tuple with amount of tile coordinates to subtract
+        :return: Another TilePosition object
+        """
+        if isinstance(other, TilePosition):
+            return TilePosition(self.tile - other.tile)
+        else:
+            return TilePosition(self.tile - Vector2(other))

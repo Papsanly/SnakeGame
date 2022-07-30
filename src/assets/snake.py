@@ -1,17 +1,14 @@
 from __future__ import annotations
 
-from typing import Literal
-
 import pygame.event
-from pygame import Vector2
+from pygame import Vector2, Surface
 from pygame.sprite import Sprite, Group
 
-from src.orientation import Orientation, DirectionStr, DirectionAngle
+from src.control.direction import Direction, DirectionStr, DirectionAngle
+from src.events import CustomEvents
 from src.settings import Settings
-from src.tile_position import TilePosition, PositionStr
-from src.utils import Utils
-
-BodyType = Literal['end', 'turn', 'straight']
+from src.control.tile_position import TilePosition, PositionStr
+from src.control.utils import Utils
 
 
 class Snake(Group):
@@ -22,129 +19,112 @@ class Snake(Group):
     def __init__(self):
         super().__init__()
 
-        self.length = 1
-        self.direction_map: dict[TilePosition, Orientation] = {}
+        self.direction = Direction('U')
 
-        self.turn_dirs = []
-        self.head = SnakeBodyEnd('center', 'U')
-        self.tail = SnakeBodyEnd('center', 'U', shift=(0, 3), tail=True)
-        self.add(self.head,
-                 SnakeBodyStraight('center', 'U', shift=(0, 1)),
-                 SnakeBodyStraight('center', 'U', shift=(0, 2)),
-                 self.tail)
+        self.turns_list = []
+        self.head = SnakeBody('center', 0)
+        self.tail = SnakeBody('center', 1, shift=(0, 1))
+        self.head.prev = self.tail
+        self.tail.nxt = self.head
+        self.add(self.tail, self.head)
 
-        self.move_event = pygame.event.custom_type()
-        pygame.time.set_timer(self.move_event, int(1000 / Settings.snake_speed))
+        pygame.time.set_timer(CustomEvents.move_snake.value, int(1000 / Settings.snake_speed))
+
+    def draw(self, surface):
+        for sprite in sorted(self.sprites(), key=lambda x: x.index, reverse=True):
+            surface.blit(sprite.image, sprite.rect)
+
+    def add(self, *sprites: Sprite):
+        for sprite in sprites:
+            if hasattr(sprite, 'nxt') and hasattr(sprite, 'prev'):
+                if sprite is not self.head and sprite is not self.tail:
+                    sprite.nxt = self.tail
+                    self.tail.prev = sprite
+                    self.tail = sprite
+                    sprite.index = len(self)
+                super().add(sprite)
 
     def turn(self, direction: DirectionStr | DirectionAngle | Vector2) -> None:
         """
         Turn the snake in given direction
         :param direction: Direction to turn the snake in
         """
-        curr_dir = self.head.direction if not self.turn_dirs else self.turn_dirs[-1]
-
-        if (curr_dir - Orientation(direction)).angle in (90, 270):
-            self.turn_dirs.append(Orientation(direction))
+        curr_dir = self.direction if not self.turns_list else self.turns_list[-1]
+        if Direction(direction).perpendicular(curr_dir):
+            self.turns_list.append(Direction(direction))
 
     def update(self) -> None:
         """
-        Move snake parts according to direction map
+        Move snake parts
         """
-        if self.turn_dirs:
-            self.direction_map[self.head.position] = self.turn_dirs.pop(0)
+        # get current direction
+        if self.turns_list:
+            self.direction = self.turns_list.pop(0)
+
+        # move each body part to current position of the one ahead of it
+        # and change image based on positions of next and previous sprite
+        sprites = self.sprites()
+        sprites.sort(key=lambda x: x.index, reverse=True)
+        for sprite in sprites:
+            if sprite is not self.head:
+                sprite.update()
+
+        # move head along current direction
+        self.head.update(self.direction)
+
         for sprite in self.sprites():
-            if hasattr(sprite, 'position') and \
-                    hasattr(sprite, 'direction') and \
-                    hasattr(sprite, 'rotate'):
-
-                if isinstance(sprite, SnakeBodyTurn):
-                    if self.tail.position == sprite.position:
-                        sprite.remove(self)
-                    continue
-
-                old_position = sprite.position
-                old_direction = self.direction_map.get(sprite.position)
-                old_old_direction = sprite.direction
-
-                sprite.update(old_direction)
-                new_direction = self.direction_map.get(sprite.position)
-
-                if new_direction is not None:
-                    sprite.rotate(new_direction - sprite.direction)
-                if sprite is self.head:
-                    sprite.rotate(sprite.direction - old_old_direction)
-
-                if sprite is self.tail and old_position in self.direction_map:
-                    self.direction_map.pop(old_position)
-
-                if old_direction is not None and sprite is self.head:
-                    self.add(SnakeBodyTurn(old_position, old_old_direction, old_direction))
+            if hasattr(sprite, 'update_image'):
+                sprite.update_image()
 
 
 class SnakeBody(Sprite):
 
-    def __init__(self, position: TilePosition | PositionStr,
-                 direction: Orientation | DirectionStr | DirectionAngle,
-                 body_type: BodyType, shift=(0, 0)):
+    _images_dict = Utils.preload_directory('../assets/snake_body')
+
+    def __init__(self, position: TilePosition | PositionStr,  index: int = None,
+                 nxt: SnakeBody = None, prev: SnakeBody = None,
+                 shift=(0, 0)):
         super().__init__()
 
+        self.index = index
+        self.nxt = nxt
+        self.prev = prev
         self.position = TilePosition(position) + shift
-        self.direction = Orientation(direction)
-        self.body_type = body_type
 
-    def update(self, direction) -> None:
-        if direction is not None:
-            self.direction = direction
-        self.position += self.direction.vector
-        self.rect.center = self.position.center
+        self.image = None
+        self.update_image()
+        self.rect = self.image.get_rect(topleft=self.position.topleft)
 
-    def rotate(self, direction_diff: Orientation) -> None:
-        """
-        Rotate image
-        """
-        self.image = pygame.transform.rotate(self.image, direction_diff.angle)
+    def _get_next_dir(self) -> Direction:
+        if self.nxt:
+            return Direction((self.nxt.position - self.position).tile)
 
+    def _get_prev_dir(self) -> Direction:
+        if self.prev:
+            return Direction((self.position - self.prev.position).tile)
 
-class SnakeBodyEnd(SnakeBody):
+    def update(self, direction=None) -> None:
+        if direction is None:
+            direction = self._get_next_dir()
+        self.position += direction.vector
+        self.rect.topleft = self.position.topleft
 
-    def __init__(self, position: TilePosition | PositionStr,
-                 direction: Orientation | DirectionStr | DirectionAngle,
-                 shift=(0, 0), tail=False):
-        super().__init__(position, direction, 'end', shift=shift)
+    def update_image(self):
+        next_dir = self._get_next_dir()
+        prev_dir = self._get_prev_dir()
 
-        self.tail = tail
-        image_direction = -self.direction if tail else self.direction
-        self.image = Utils.load_tile_image(f'../assets/snake_body/end_{image_direction}.bmp')
-        self.rect = self.image.get_rect(center=self.position.center)
-
-
-class SnakeBodyStraight(SnakeBody):
-
-    def __init__(self, position: TilePosition | PositionStr,
-                 direction: Orientation | DirectionStr | DirectionAngle, shift=(0, 0)):
-        super().__init__(position, direction, 'straight', shift=shift)
-
-        if direction in ('U', 'D', 90, 270):
-            direction = 'V'
-        else:
-            direction = 'H'
-
-        self.image = Utils.load_tile_image(f'../assets/snake_body/straight_{direction}.bmp')
-        self.rect = self.image.get_rect(center=self.position.center)
-
-
-class SnakeBodyTurn(SnakeBody):
-
-    def __init__(self, position: TilePosition | PositionStr,
-                 start_direction: Orientation | DirectionStr | DirectionAngle,
-                 end_direction: DirectionStr | DirectionAngle, shift=(0, 0)):
-        super().__init__(position, end_direction, 'turn', shift=shift)
-
-        try:
-            self.image = Utils.load_tile_image(f'../assets/snake_body/turn_{start_direction}{end_direction}.bmp')
-        except FileNotFoundError:
-            self.image = Utils.load_tile_image(f'../assets/snake_body/turn_{-end_direction}{-start_direction}.bmp')
-        self.rect = self.image.get_rect(center=self.position.center)
-
-        self.start_direction = start_direction
-        self.end_direction = end_direction
+        match (prev_dir, next_dir):
+            case(None, None):
+                self.image = Surface(Settings.get_tile_vec())
+            case (None, _):
+                self.image = self._images_dict[f'end_{-next_dir}.bmp']
+            case (_, None):
+                self.image = self._images_dict[f'end_{prev_dir}.bmp']
+            case _:
+                if next_dir == prev_dir:
+                    self.image = self._images_dict[f'straight_{next_dir.orientation_name}.bmp']
+                else:
+                    try:
+                        self.image = self._images_dict[f'turn_{prev_dir}{next_dir}.bmp']
+                    except KeyError:
+                        self.image = self._images_dict[f'turn_{-next_dir}{-prev_dir}.bmp']

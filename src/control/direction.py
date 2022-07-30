@@ -6,7 +6,7 @@ DirectionStr = Literal['U', 'D', 'R', 'L']
 DirectionAngle = Literal[0, 90, 180, 270]
 
 
-class Orientation:
+class Direction:
     """
     Class for managing sprite orientation
     """
@@ -42,21 +42,37 @@ class Orientation:
 
         self.__dir_internal = direction
 
-    def __add__(self, other: Orientation) -> Orientation:
+    def perpendicular(self, other: Direction):
+        """
+        :param other: Other orientation
+        :return: True if orientations are perpendicular , false otherwise
+        """
+        return (self - other).angle in (90, 270)
+
+    def __add__(self, other: Direction) -> Direction:
         """
         Add angles mod 360
         :param other: Another Orientation object
         :return: Another Orientation object
         """
-        return Orientation((self.angle + other.angle) % 360)
+        return Direction((self.angle + other.angle) % 360)
 
-    def __sub__(self, other: Orientation) -> Orientation:
+    def __sub__(self, other: Direction) -> Direction:
         """
         Subtract angles mod 360
         :param other: Another Orientation object
-        :return: Another Orientation object
+        :return: Another Direction object
         """
-        return Orientation((self.angle - other.angle) % 360)
+        return Direction((self.angle - other.angle) % 360)
+
+    @property
+    def orientation_name(self):
+        if self.name in ('U', 'D'):
+            return 'V'
+        elif self.name in ('R', 'L'):
+            return 'H'
+        else:
+            raise ValueError('Invalid direction!')
 
     @property
     def name(self):
@@ -67,7 +83,7 @@ class Orientation:
                 return self.__vector_name_dict[tuple(self.__dir_internal)]
             elif isinstance(self.__dir_internal, (int, float)):
                 return self.__angle_name_dict[self.__dir_internal]
-            elif isinstance(self.__dir_internal, Orientation):
+            elif isinstance(self.__dir_internal, Direction):
                 return self.__dir_internal.name
             else:
                 raise KeyError
@@ -83,7 +99,7 @@ class Orientation:
                 return Vector2(self.__dir_internal)
             elif isinstance(self.__dir_internal, (int, float)):
                 return Vector2(self.__angle_vector_dict[int(self.__dir_internal)])
-            elif isinstance(self.__dir_internal, Orientation):
+            elif isinstance(self.__dir_internal, Direction):
                 return self.__dir_internal.vector
             else:
                 raise KeyError
@@ -99,7 +115,7 @@ class Orientation:
                 return self.__vector_angle_dict[tuple(self.__dir_internal)]
             elif isinstance(self.__dir_internal, (int, float)):
                 return int(self.__dir_internal)
-            elif isinstance(self.__dir_internal, Orientation):
+            elif isinstance(self.__dir_internal, Direction):
                 return self.__dir_internal.angle
             else:
                 raise KeyError
@@ -112,20 +128,20 @@ class Orientation:
         """
         return self.name
 
-    def __eq__(self, other: Orientation) -> bool:
+    def __eq__(self, other: Direction) -> bool:
         """
         :param other: Another Orientation object
         :return: True if names are equal
         """
         return self.name == other.name
 
-    def __neg__(self) -> Orientation:
+    def __neg__(self) -> Direction:
         """
         :return: New Orientation object with opposite direction
         """
-        return Orientation(-self.vector)
+        return Direction(-self.vector)
 
-    def __ne__(self, other: Orientation) -> bool:
+    def __ne__(self, other: Direction) -> bool:
         """
         :param other: Another Orientation object
         :return: True if names are not equal

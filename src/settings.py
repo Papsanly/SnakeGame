@@ -8,9 +8,9 @@ class Settings:
     Dataclass that stores all game constants
     """
 
-    tiles_count = Vector2(15, 15)  # amount of tiles on x and y-axis
-    tile_size = 40  # pixel size of one tile
-    snake_speed = 6.0  # amount of tiles snake goes through per second
+    tiles_count = Vector2(65, 65)  # amount of tiles on x and y-axis
+    tile_size = 10  # pixel size of one tile
+    snake_speed = 30.0  # amount of tiles snake goes through per second
     fps = 60
 
     @classmethod
