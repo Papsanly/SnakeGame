@@ -11,7 +11,7 @@ class Settings:
     tiles_count = Vector2(65, 65)  # amount of tiles on x and y-axis
     tile_size = 10  # pixel size of one tile
     snake_speed = 30.0  # amount of tiles snake goes through per second
-    fps = 60
+    fps = 30
 
     @classmethod
     def get_resolution(cls) -> Vector2:

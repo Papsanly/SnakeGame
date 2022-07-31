@@ -28,7 +28,13 @@ class Snake(Group):
         self.tail.nxt = self.head
         self.add(self.tail, self.head)
 
-        pygame.time.set_timer(CustomEvents.move_snake.value, int(1000 / Settings.snake_speed))
+        pygame.time.set_timer(CustomEvents.move_snake, int(1000 / Settings.snake_speed))
+
+    def grow(self):
+        """
+        Add one body sprite at the end of snake
+        """
+        self.add(SnakeBody(self.tail.position * 2 - self.tail.nxt.position))
 
     def draw(self, surface):
         for sprite in sorted(self.sprites(), key=lambda x: x.index, reverse=True):

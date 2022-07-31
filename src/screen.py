@@ -7,12 +7,16 @@ from src.snake_game import SnakeGame
 
 class ScreenManager:
     """
-    Class for managing screen variables and screen rendering
+    Class for managing game window variables and screen rendering
     """
 
-    def __init__(self, game: SnakeGame, screen: Surface):
+    # Setting up pygame window
+    pygame.init()
+    screen_surf = pygame.display.set_mode(Settings.get_resolution())
+    pygame.display.set_caption('Snake Game')
+
+    def __init__(self, game: SnakeGame):
         self._game = game
-        self.screen_surf = screen
         self.screen_rect = self.screen_surf.get_rect()
 
     def update(self) -> None:

@@ -2,21 +2,16 @@ class SnakeGame:
     """
     Main game class
     """
-    def __init__(self, screen) -> None:
+    def __init__(self) -> None:
         """
-        Initiate pygame, create objects and groups
+        Create objects and game rosources
         """
-
-        # add length to snake event for debug
-        # self.add_snake = pygame.event.custom_type()
-        # pygame.time.set_timer(self.add_snake, 1, loops=600)
-
         # create objects
         self.snake = Snake()
 
         # event handler and screen manager initiation
         self.event_handler = EventHandler(self)
-        self.screen_manager = ScreenManager(self, screen)
+        self.screen_manager = ScreenManager(self)
 
     def run(self) -> None:
         """
@@ -29,18 +24,11 @@ class SnakeGame:
 
 
 if __name__ == '__main__':
-    import pygame
     from src.settings import Settings
-
-    pygame.init()
-    screen = pygame.display.set_mode(Settings.get_resolution())
-    pygame.display.set_caption('Snake Game')
-
     from src.screen import ScreenManager
     from src.events import EventHandler
-
-    from src.assets.snake import Snake
     from src.control.utils import Utils
+    from src.assets.snake import Snake
 
-    snake_game = SnakeGame(screen)
+    snake_game = SnakeGame()
     snake_game.run()
