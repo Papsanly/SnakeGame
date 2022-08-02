@@ -5,7 +5,6 @@ import pygame
 from pygame import USEREVENT
 from pygame.event import Event
 
-from src import states
 from src.snake_game import SnakeGame
 from src.states import States, CurrentState
 

@@ -1,6 +1,5 @@
 import pygame
 
-from src import states
 from src.settings import Settings
 from src.snake_game import SnakeGame
 from src.states import States, CurrentState
@@ -30,5 +29,8 @@ class Screen:
                 obj.draw(self.surface)
         elif CurrentState.current_state == States.GAME_START:
             for obj in self._game.game_start_group:
-                obj.draw()
+                obj.draw(self.surface)
+        elif CurrentState.current_state == States.GAME_END:
+            for obj in self._game.game_end_group:
+                obj.draw(self.surface)
         pygame.display.update()
