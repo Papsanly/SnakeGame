@@ -49,3 +49,10 @@ class Utils:
                 except pygame.error:
                     pass
         return result
+
+    @classmethod
+    def get_food_images_count(cls) -> int:
+        """
+        :return: Amount of food images stored in assets/food directory
+        """
+        return len(list(walk(cls.get_abspath('../assets/food')))[0][2])

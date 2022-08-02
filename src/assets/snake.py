@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from random import choice
+
 import pygame.event
-from pygame import Vector2, Surface
+from pygame import Vector2, Surface, BLEND_RGB_MULT, BLEND_RGB_ADD
 from pygame.sprite import Sprite, Group
 
 from src.control.direction import Direction, DirectionStr, DirectionAngle
@@ -20,21 +22,33 @@ class Snake(Group):
         super().__init__()
 
         self.direction = Direction('U')
+        self.length = 1
 
         self.turns_list = []
-        self.head = SnakeBody('center', 0)
-        self.tail = SnakeBody('center', 1, shift=(0, 1))
+        self.head = SnakeBody('center', 0, color=choice(Settings.food_colors))
+        self.tail = SnakeBody('center', 1, shift=(0, 1), color=choice(Settings.food_colors))
         self.head.prev = self.tail
         self.tail.nxt = self.head
         self.add(self.tail, self.head)
 
         pygame.time.set_timer(CustomEvents.move_snake, int(1000 / Settings.snake_speed))
 
-    def grow(self):
+    def get_body_positions(self) -> list[TilePosition]:
+        positions = []
+        for sprite in self.sprites():
+            if hasattr(sprite, 'position'):
+                positions.append(sprite.position)
+        return positions
+
+    def grow(self, foods):
         """
         Add one body sprite at the end of snake
         """
-        self.add(SnakeBody(self.tail.position * 2 - self.tail.nxt.position))
+        self.length += 1
+        for food in foods.sprites():
+            if hasattr(food, 'position'):
+                if food.position == self.head.prev.position:
+                    self.add(SnakeBody(self.tail.position * 2 - self.tail.nxt.position, color=food.color))
 
     def draw(self, surface):
         for sprite in sorted(self.sprites(), key=lambda x: x.index, reverse=True):
@@ -87,11 +101,12 @@ class SnakeBody(Sprite):
 
     _images_dict = Utils.preload_directory('../assets/snake_body')
 
-    def __init__(self, position: TilePosition | PositionStr,  index: int = None,
+    def __init__(self, position: TilePosition | PositionStr, index: int = None, color = None,
                  nxt: SnakeBody = None, prev: SnakeBody = None,
                  shift=(0, 0)):
         super().__init__()
 
+        self.color = color
         self.index = index
         self.nxt = nxt
         self.prev = prev
@@ -134,3 +149,11 @@ class SnakeBody(Sprite):
                         self.image = self._images_dict[f'turn_{prev_dir}{next_dir}.bmp']
                     except KeyError:
                         self.image = self._images_dict[f'turn_{-next_dir}{-prev_dir}.bmp']
+        color_image = Surface(Settings.get_tile_vec())
+        white_image = Surface(Settings.get_tile_vec())
+
+        color_image.fill(self.color)
+        white_image.fill(3 * (64,))
+        color_image.blit(white_image, (0, 0), special_flags=BLEND_RGB_ADD)
+        color_image.blit(self.image.copy(), (0, 0), special_flags=BLEND_RGB_MULT)
+        self.image = color_image
