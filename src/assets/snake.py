@@ -112,10 +112,9 @@ class Snake(Group):
 
 
 class SnakeBody(Sprite):
-
     _images_dict = Utils.preload_directory('../assets/snake_body')
 
-    def __init__(self, position: TilePosition | PositionStr, index: int = None, color = None,
+    def __init__(self, position: TilePosition | PositionStr, index: int = None, color=None,
                  nxt: SnakeBody = None, prev: SnakeBody = None,
                  shift=(0, 0)):
         super().__init__()
@@ -149,7 +148,7 @@ class SnakeBody(Sprite):
         prev_dir = self._get_prev_dir()
 
         match (prev_dir, next_dir):
-            case(None, None):
+            case (None, None):
                 self.image = Surface(Settings.get_tile_vec())
             case (None, _):
                 self.image = self._images_dict[f'end_{-next_dir}.bmp']

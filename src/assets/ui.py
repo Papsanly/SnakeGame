@@ -1,16 +1,9 @@
-import time
-
 import pygame.font
-from pygame import BLEND_RGB_ADD, BLEND_RGB_MULT
+from pygame import BLEND_RGB_ADD
 from pygame.math import Vector2
 from pygame.sprite import Group, Sprite
-from pygame.surface import Surface
 
-from src.assets.food import FoodGroup
-from src.assets.snake import Snake
 from src.control.utils import Utils
-from src.settings import Settings
-from src.snake_game import SnakeGame
 from src.states import States, CurrentState
 
 
