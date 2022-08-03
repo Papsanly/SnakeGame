@@ -10,7 +10,7 @@ class Settings:
 
     tiles_count = Vector2(51, 31)  # amount of tiles on x and y-axis
     tile_size = 25  # pixel size of one tile
-    snake_speed = 12.0  # amount of tiles snake goes through per second
+    snake_speed = 9.0  # amount of tiles snake goes through per second
     fps = 30  # main loop iterations per second
     food_colors = [
         (209, 42, 72),
@@ -19,7 +19,7 @@ class Settings:
         (196, 117, 235),
         (250, 164, 72)
     ]  # variations of food colors
-    food_count = 500  # maximum amount of food at any time
+    food_count = 5  # maximum amount of food at any time
 
     @classmethod
     def get_resolution(cls) -> Vector2:

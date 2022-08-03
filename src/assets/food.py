@@ -14,9 +14,15 @@ class FoodGroup(Group):
 
     def __init__(self, snake: Snake, count: int):
         super().__init__()
-
+        self.count = count
+        self.snake = snake
         for _ in range(count):
             self.add_random_food(snake)
+
+    def reset(self):
+        self.empty()
+        for _ in range(self.count):
+            self.add_random_food(self.snake)
 
     def add_random_food(self, snake):
         while True:

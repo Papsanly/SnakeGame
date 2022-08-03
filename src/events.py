@@ -27,6 +27,9 @@ class _EventMethod:
         self.use_event = use_event
         self.indices = [0] if indices is None else indices
 
+    def __repr__(self):
+        return f'EventMethod(method={self.method})'
+
     def __call__(self, events: list[Event] = None):
         if self.use_event:
             used_events = []
@@ -70,6 +73,13 @@ class EventHandler:
                     _EventMethod(self._game.foods.replace_food, snake=self._game.snake)
                 ],
                 'states': [States.GAME_ACTIVE]
+            },
+            (pygame.MOUSEBUTTONUP,):
+            {
+                'methods': [
+                    _EventMethod(self._game.ui.check_clicks)
+                ],
+                'states': [States.GAME_END, States.GAME_START]
             }
         }
 
