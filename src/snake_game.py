@@ -1,3 +1,6 @@
+import os
+
+
 class SnakeGame:
     """
     Main game class
@@ -9,16 +12,19 @@ class SnakeGame:
         # create objects
         self.snake = Snake()
         self.foods = FoodGroup(self.snake, Settings.food_count)
+
+        self.statistics = Statistics(self)
+        self.screen = Screen(self)
+
         self.ui = UI(self)
 
         # create states group
-        self.game_active_group = [self.foods, self.snake]
+        self.game_active_group = [self.foods, self.snake, self.ui]
         self.game_start_group = [self.ui]
-        self.game_end_group = [self.ui]
+        self.game_end_group = [self.foods, self.snake, self.ui]
 
-        # event handler and screen manager initiation
+        # event handler, screen manager and statistics initiation
         self.event_handler = EventHandler(self)
-        self.screen = Screen(self)
 
     def _check_snake_food_intersection(self):
         food_positions = self.foods.get_food_positions()
@@ -33,6 +39,7 @@ class SnakeGame:
             snake_head_position in snake_positions or
             not self.screen.rect.collidepoint(snake_head_position.topleft)
         ):
+            pygame.mouse.set_visible(True)
             CurrentState.current_state = States.GAME_END
 
     def run(self) -> None:
@@ -43,6 +50,9 @@ class SnakeGame:
             self._check_snake_food_intersection()
             self._check_snake_collisions()
 
+            self.statistics.update()
+            self.ui.update(self)
+
             self.event_handler.handle()
             self.screen.update()
 
@@ -50,6 +60,9 @@ class SnakeGame:
 
 
 if __name__ == '__main__':
+    # # change working directory for launching through shortcuts
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
     import pygame
     from pygame.event import Event
     from src.states import States, CurrentState
@@ -57,6 +70,7 @@ if __name__ == '__main__':
     from src.screen import Screen
     from src.events import EventHandler, CustomEvents
     from src.control.utils import Utils
+    from src.statistics import Statistics
     from src.assets.snake import Snake
     from src.assets.food import FoodGroup
     from src.assets.ui import UI

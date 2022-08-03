@@ -8,9 +8,9 @@ class Settings:
     Dataclass that stores all game constants
     """
 
-    tiles_count = Vector2(51, 31)  # amount of tiles on x and y-axis
-    tile_size = 25  # pixel size of one tile
-    snake_speed = 12.0  # amount of tiles snake goes through per second
+    tiles_count = Vector2(31, 21)  # amount of tiles on x and y-axis
+    tile_size = 40  # pixel size of one tile
+    snake_speed = 7.0  # amount of tiles snake goes through per second
     fps = 30  # main loop iterations per second
     food_colors = [
         (209, 42, 72),
@@ -19,7 +19,7 @@ class Settings:
         (196, 117, 235),
         (250, 164, 72)
     ]  # variations of food colors
-    food_count = 500  # maximum amount of food at any time
+    food_count = 5  # maximum amount of food at any time
 
     @classmethod
     def get_resolution(cls) -> Vector2:
@@ -31,6 +31,6 @@ class Settings:
     @classmethod
     def get_tile_vec(cls) -> Vector2:
         """
-        Returns vector representing 1 tile
+        Returns vector representing dimentions of 1 tile
         """
         return Vector2(cls.tile_size, cls.tile_size)

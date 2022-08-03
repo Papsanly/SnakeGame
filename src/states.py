@@ -9,4 +9,4 @@ class States(Enum):
 
 
 class CurrentState:
-    current_state = States.GAME_ACTIVE
+    current_state = States.GAME_START

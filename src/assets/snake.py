@@ -33,6 +33,20 @@ class Snake(Group):
 
         pygame.time.set_timer(CustomEvents.move_snake, int(1000 / Settings.snake_speed))
 
+    def reset(self):
+        self.empty()
+        self.direction = Direction('U')
+        self.turns_list = []
+        self.length = 1
+
+        self.head = SnakeBody('center', 0, color=choice(Settings.food_colors))
+        self.tail = SnakeBody('center', 1, shift=(0, 1), color=choice(Settings.food_colors))
+        self.head.prev = self.tail
+        self.tail.nxt = self.head
+        self.add(self.tail, self.head)
+
+        pygame.time.set_timer(CustomEvents.move_snake, int(1000 / Settings.snake_speed))
+
     def get_body_positions(self) -> list[TilePosition]:
         positions = []
         for sprite in self.sprites():
@@ -98,10 +112,9 @@ class Snake(Group):
 
 
 class SnakeBody(Sprite):
-
     _images_dict = Utils.preload_directory('../assets/snake_body')
 
-    def __init__(self, position: TilePosition | PositionStr, index: int = None, color = None,
+    def __init__(self, position: TilePosition | PositionStr, index: int = None, color=None,
                  nxt: SnakeBody = None, prev: SnakeBody = None,
                  shift=(0, 0)):
         super().__init__()
@@ -135,7 +148,7 @@ class SnakeBody(Sprite):
         prev_dir = self._get_prev_dir()
 
         match (prev_dir, next_dir):
-            case(None, None):
+            case (None, None):
                 self.image = Surface(Settings.get_tile_vec())
             case (None, _):
                 self.image = self._images_dict[f'end_{-next_dir}.bmp']
