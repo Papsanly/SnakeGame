@@ -10,7 +10,7 @@ The Snake Game is a game where player controls the snake, which becomes longer e
 2. Set records.
 3. Have fun with colorful snake:)
 
-**_How to install an App_**
+**_How to install the game_**
 1. Install Python the latest version (3.10.6) [here](https://www.python.org/downloads/).
 2. Download this repository through command line (`git clone https://github.com/Papsanly/SnakeGame`) or through 
    the download button on github.
